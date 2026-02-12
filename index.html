@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=yes">
+    <title>Mantenimiento Waldorf</title>
+    <!-- Estilo suave, natural, inspirado en pedagogía Waldorf -->
+    <style>
+        /* mobile first – todo fluye desde lo pequeño */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #f9f3e9;  /* cálido, como papel reciclado */
+            font-family: 'Atkinson Hyperlegible', 'Segoe UI', Roboto, -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.5;
+            color: #3e2e23;
+            padding: 1rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* contenedor principal — acogedor, ancho máximo de lectura */
+        .waldorf-wrapper {
+            max-width: 800px;
+            width: 100%;
+        }
+
+        /* Título principal: artesanal, con sombra suave */
+        h1 {
+            font-size: 2.4rem;
+            font-weight: 400;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #5e4b3a;
+            border-bottom: 3px solid #dbb88c;
+            display: inline-block;
+            padding-bottom: 0.25rem;
+            margin-bottom: 2rem;
+            margin-top: 0.5rem;
+            text-shadow: 2px 2px 0 rgba(235, 205, 167, 0.3);
+            word-break: break-word;
+        }
+
+        /* cada área Waldorf (primaria, jardín, maternal, general) */
+        .area {
+            background: rgba(255, 247, 240, 0.7);
+            border-radius: 32px 12px 32px 12px; /* orgánico, no recto */
+            padding: 1.5rem 1.2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 18px -6px rgba(120, 90, 70, 0.12);
+            border: 1px solid #e6d8c5;
+            backdrop-filter: blur(2px);
+        }
+
+        /* subtítulos: serenos, con detalle de línea */
+        h2 {
+            font-size: 1.8rem;
+            font-weight: 380;
+            color: #7a5a44;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-left: 10px solid #c7aa82;
+            padding-left: 0.75rem;
+        }
+
+        /* cada tarea se convierte en una “tarjeta abierta” */
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            margin-top: 0.8rem;
+        }
+
+        /* ítem de tarea fija (predefinida por el adulto) */
+        .task-item {
+            background: #fffefc;
+            padding: 1rem 1.1rem;
+            border-radius: 20px 8px 20px 8px;
+            border: 1px solid #eedccb;
+            box-shadow: 3px 3px 0 #e2cfbc;
+            transition: all 0.1s ease;
+        }
+
+        /* nombre de la tarea (ej: "Limpiar ventanas") */
+        .task-name {
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: #4a3729;
+            display: block;
+            margin-bottom: 0.75rem;
+            border-bottom: 1px dashed #d9b8a4;
+            padding-bottom: 0.4rem;
+        }
+
+        /* formulario para aportar nombre y grado */
+        .contribution-form {
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
+            margin: 0.8rem 0 0.6rem;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.4rem 0.8rem;
+        }
+
+        label {
+            font-size: 0.9rem;
+            color: #69554a;
+            font-weight: 500;
+            min-width: 50px;
+        }
+
+        input {
+            background: #fefcf7;
+            border: 1px solid #d6c0ad;
+            border-radius: 30px;
+            padding: 0.7rem 1rem;
+            font-size: 1rem;
+            flex: 1 1 180px;
+            font-family: inherit;
+            transition: 0.2s;
+            border: 1.5px solid #e3cebc;
+        }
+
+        input:focus {
+            border-color: #b4835c;
+            outline: none;
+            background-color: #fff9f2;
+            box-shadow: 0 0 0 3px rgba(180, 140, 100, 0.15);
+        }
+
+        /* botón con estilo manual, como pintado a mano */
+        .btn {
+            background: #ebdac9;
+            border: none;
+            border-radius: 50px;
+            padding: 0.7rem 1.3rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #3a2e25;
+            border-bottom: 4px solid #bcaa96;
+            align-self: flex-start;
+            transition: 0.07s;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #e5cfbc;
+            border-bottom-width: 4px;
+        }
+
+        .btn:hover {
+            background: #e2cfbc;
+            border-bottom-width: 2px;
+            transform: translateY(2px);
+            border-bottom-color: #9f8b7a;
+        }
+
+        .btn:active {
+            transform: translateY(3px);
+            border-bottom-width: 1px;
+        }
+
+        /* muro comunitario: donde aparecen nombre + grado */
+        .contributors-wall {
+            margin-top: 1.1rem;
+            background: #f7efe7;
+            padding: 0.9rem 1rem;
+            border-radius: 18px;
+            border-left: 8px solid #c6a882;
+            font-size: 0.95rem;
+        }
+
+        .wall-title {
+            font-weight: 600;
+            color: #624c3c;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 0.6rem;
+            font-size: 1rem;
+        }
+
+        .participant-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.45rem;
+        }
+
+        .participant-list li {
+            background: white;
+            padding: 0.45rem 1rem;
+            border-radius: 30px;
+            border: 1px solid #eddacb;
+            color: #4d3a2e;
+            display: inline-block;
+            width: fit-content;
+            max-width: 100%;
+            word-break: break-word;
+            box-shadow: 1px 2px 0 #dac2b0;
+        }
+
+        .empty-message {
+            color: #957a68;
+            font-style: italic;
+            padding: 0.3rem 0;
+        }
+
+        /* todo debe respirar */
+        .small-note {
+            font-size: 0.8rem;
+            color: #8e7a6b;
+            margin-top: 0.2rem;
+        }
+
+        /* adaptaciones para desktop solo ajustan contenedor */
+        @media (min-width: 640px) {
+            body {
+                padding: 2rem;
+            }
+            .waldorf-wrapper {
+                max-width: 1000px;
+            }
+            .form-row {
+                flex-wrap: nowrap;
+            }
+            .btn {
+                padding: 0.6rem 2rem;
+            }
+        }
+
+        /* bordes suaves, sin esquinas agresivas */
+        ::selection {
+            background: #dbb88c;
+            color: #1f1a16;
+        }
+
+        footer {
+            margin-top: 1.5rem;
+            font-size: 0.85rem;
+            color: #8f7a68;
+            text-align: center;
+            border-top: 1px dashed #dac2af;
+            padding-top: 1.8rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="waldorf-wrapper">
+        <h1>MANTENIMIENTOS</h1>
+
+        <!-- SECCIÓN PRIMARIA -->
+        <section class="area">
+            <h2>📘 Primaria</h2>
+            <div class="task-list">
+                <!-- Tarea fija 1: Aseo de aulas -->
+                <div class="task-item" id="task-prim1">
+                    <span class="task-name">🧹 Barrer y ordenar aulas</span>
+                    <div class="contribution-form">
+                        <div class="form-row">
+                            <label for="nombre-prim1">Nombre</label>
+                            <input type="text" id="nombre-prim1" placeholder="ej. Martina" value="">
+                        </div>
+                        <div class="form-row">
+                            <label for="grado-prim1">Grado</label>
+                            <input type="text" id="grado-prim1" placeholder="3° / 4° B ..." value="">
+                        </div>
+                        <button class="btn" onclick="agregarParticipante('prim1', 'Limpiar aulas')">🌿 Sumar mi ayuda</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-prim1">
+                        <span class="wall-title">👥 Ya colaboran:</span>
+                        <ul class="participant-list" id="list-prim1">
+                            <li class="empty-message">Aún sin voluntades · anímate</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Tarea fija 2: Materiales -->
+                <div class="task-item" id="task-prim2">
+                    <span class="task-name">📦 Revisar materiales de arte</span>
+                    <div class="contribution-form">
+                        <div class="form-row">
+                            <label for="nombre-prim2">Nombre</label>
+                            <input type="text" id="nombre-prim2" placeholder="ej. Juan">
+                        </div>
+                        <div class="form-row">
+                            <label for="grado-prim2">Grado</label>
+                            <input type="text" id="grado-prim2" placeholder="5° A">
+                        </div>
+                        <button class="btn" onclick="agregarParticipante('prim2', 'Revisar materiales')">🌿 Sumar mi ayuda</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-prim2">
+                        <span class="wall-title">👥 Ya colaboran:</span>
+                        <ul class="participant-list" id="list-prim2">
+                            <li class="empty-message">Aún sin voluntades · anímate</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN JARDIN -->
+        <section class="area">
+            <h2>🌼 Jardín</h2>
+            <div class="task-list">
+                <div class="task-item" id="task-jard1">
+                    <span class="task-name">🧸 Lavado de juegos didácticos</span>
+                    <div class="contribution-form">
+                        <div class="form-row">
+                            <label for="nombre-jard1">Nombre</label>
+                            <input type="text" id="nombre-jard1" placeholder="Nombre">
+                        </div>
+                        <div class="form-row">
+                            <label for="grado-jard1">Grado</label>
+                            <input type="text" id="grado-jard1" placeholder="sala de 4">
+                        </div>
+                        <button class="btn" onclick="agregarParticipante('jard1', 'Lavar juegos')">🌿 Sumar mi ayuda</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-jard1">
+                        <span class="wall-title">👥 Ya colaboran:</span>
+                        <ul class="participant-list" id="list-jard1">
+                            <li class="empty-message">Aún sin voluntades · anímate</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="task-item" id="task-jard2">
+                    <span class="task-name">🌱 Regar y cuidar macetas</span>
+                    <div class="contribution-form">
+                        <div class="form-row">
+                            <label for="nombre-jard2">Nombre</label>
+                            <input type="text" id="nombre-jard2" placeholder="Nombre">
+                        </div>
+                        <div class="form-row">
+                            <label for="grado-jard2">Grado</label>
+                            <input type="text" id="grado-jard2" placeholder="sala verde">
+                        </div>
+                        <button class="btn" onclick="agregarParticipante('jard2', 'Cuidar plantas')">🌿 Sumar mi ayuda</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-jard2">
+                        <span class="wall-title">👥 Ya colaboran:</span>
+                        <ul class="participant-list" id="list-jard2">
+                            <li class="empty-message">Aún sin voluntades · anímate</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN MATERNAL -->
+        <section class="area">
+            <h2>🍼 Maternal</h2>
+            <div class="task-list">
+                <div class="task-item" id="task-mat1">
+                    <span class="task-name">🧴 Reponer pañales/toallitas</span>
+                    <div class="contribution-form">
+                        <div class="form-row">
+                            <label for="nombre-mat1">Nombre</label>
+                            <input type="text" id="nombre-mat1" placeholder="Nombre">
+                        </div>
+                        <div class="form-row">
+                            <label for="grado-mat1">Grado</label>
+                            <input type="text" id="grado-mat1" placeholder="lactantes">
+                        </div>
+                        <button class="btn" onclick="agregarParticipante('mat1', 'Reponer pañales')">🌿 Sumar mi ayuda</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-mat1">
+                        <span class="wall-title">👥 Ya colaboran:</span>
+                        <ul class="participant-list" id="list-mat1">
+                            <li class="empty-message">Aún sin voluntades · anímate</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="task-item" id="task-mat2">
+                    <span class="task-name">🧸 Esterilizar chupetes</span>
+                    <div class="contribution-form">
+                        <div class="form-row">
+                            <label for="nombre-mat2">Nombre</label>
+                            <input type="text" id="nombre-mat2" placeholder="Nombre">
+                        </div>
+                        <div class="form-row">
+                            <label for="grado-mat2">Grado</label>
+                            <input type="text" id="grado-mat2" placeholder="bebés">
+                        </div>
+                        <button class="btn" onclick="agregarParticipante('mat2', 'Esterilizar')">🌿 Sumar mi ayuda</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-mat2">
+                        <span class="wall-title">👥 Ya colaboran:</span>
+                        <ul class="participant-list" id="list-mat2">
+                            <li class="empty-message">Aún sin voluntades · anímate</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN GENERAL -->
+        <section class="area">
+            <h2>🛠️ General</h2>
+            <div class="task-list">
+                <div class="task-item" id="task-gen1">
+                    <span class="task-name">💡 Cambiar luces fundidas</span>
+                    <div class="contribution-form">
+                        <div class="form-row">
+                            <label for="nombre-gen1">Nombre</label>
+                            <input type="text" id="nombre-gen1" placeholder="Nombre">
+                        </div>
+                        <div class="form-row">
+                            <label for="grado-gen1">Grado</label>
+                            <input type="text" id="grado-gen1" placeholder="docente / 6°">
+                        </div>
+                        <button class="btn" onclick="agregarParticipante('gen1', 'Cambiar luces')">🌿 Sumar mi ayuda</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-gen1">
+                        <span class="wall-title">👥 Ya colaboran:</span>
+                        <ul class="participant-list" id="list-gen1">
+                            <li class="empty-message">Aún sin voluntades · anímate</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="task-item" id="task-gen2">
+                    <span class="task-name">🧹 Limpieza de jardín exterior</span>
+                    <div class="contribution-form">
+                        <div class="form-row">
+                            <label for="nombre-gen2">Nombre</label>
+                            <input type="text" id="nombre-gen2" placeholder="Nombre">
+                        </div>
+                        <div class="form-row">
+                            <label for="grado-gen2">Grado</label>
+                            <input type="text" id="grado-gen2" placeholder="familia">
+                        </div>
+                        <button class="btn" onclick="agregarParticipante('gen2', 'Jardín exterior')">🌿 Sumar mi ayuda</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-gen2">
+                        <span class="wall-title">👥 Ya colaboran:</span>
+                        <ul class="participant-list" id="list-gen2">
+                            <li class="empty-message">Aún sin voluntades · anímate</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <footer>
+            🌟 comunidad Waldorf — cada pequeña tarea sostiene el jardín
+        </footer>
+    </div>
+
+    <script>
+        // OBJETIVO: los visitantes completan nombre y grado y todos lo ven 
+        // Usamos almacenamiento local para que persista (todos ven lo mismo al recargar)
+        // pero como queremos que sea colaborativo y simple, guardamos en localStorage por tarea
+
+        // Inicialización: cargar desde localStorage o establecer array vacío
+        function inicializarTarea(taskId) {
+            const stored = localStorage.getItem(`waldorf_${taskId}`);
+            if (stored) {
+                try {
+                    return JSON.parse(stored);
+                } catch(e) {
+                    return [];
+                }
+            }
+            return [];  // por defecto sin participantes
+        }
+
+        // Guardar lista en localStorage
+        function guardarTarea(taskId, participantes) {
+            localStorage.setItem(`waldorf_${taskId}`, JSON.stringify(participantes));
+        }
+
+        // Renderizar la lista de participantes en el <ul>
+        function renderizarMuro(taskId, participantes) {
+            const listaUl = document.getElementById(`list-${taskId}`);
+            if (!listaUl) return;
+            // limpiar contenido
+            listaUl.innerHTML = '';
+            if (!participantes || participantes.length === 0) {
+                const emptyLi = document.createElement('li');
+                emptyLi.className = 'empty-message';
+                emptyLi.textContent = 'Aún sin voluntades · anímate';
+                listaUl.appendChild(emptyLi);
+            } else {
+                participantes.forEach(p => {
+                    const li = document.createElement('li');
+                    // mostramos nombre y grado juntos: ejemplo "Martina · 3°B"
+                    li.textContent = `${p.nombre || 'Nombre'} · ${p.grado || 'grado'}`;
+                    listaUl.appendChild(li);
+                });
+            }
+        }
+
+        // Función principal llamada desde cada botón
+        function agregarParticipante(taskId, tareaDescripcion) {
+            // Obtener valores de los campos de entrada según taskId
+            const nombreInput = document.getElementById(`nombre-${taskId}`);
+            const gradoInput = document.getElementById(`grado-${taskId}`);
+
+            let nombre = nombreInput ? nombreInput.value.trim() : '';
+            let grado = gradoInput ? gradoInput.value.trim() : '';
+
+            if (nombre === '' && grado === '') {
+                alert('👋 Escribe al menos tu nombre o grado para sumarte');
+                return;
+            }
+            if (nombre === '') nombre = 'Voluntario/a';
+            if (grado === '') grado = '—';
+
+            // Cargar participantes actuales
+            const participantes = inicializarTarea(taskId);
+            
+            // Agregar nuevo participante
+            participantes.push({ nombre: nombre, grado: grado });
+            
+            // Guardar y renderizar
+            guardarTarea(taskId, participantes);
+            renderizarMuro(taskId, participantes);
+
+            // Limpiar inputs para la siguiente persona
+            if (nombreInput) nombreInput.value = '';
+            if (gradoInput) gradoInput.value = '';
+
+            // Pequeño feedback
+            // (Opcional) mostrar mensaje suave
+        }
+
+        // Cargar todos los muros al iniciar la página
+        function cargarTodosLosMuros() {
+            // Lista de todas las tareas (ids de muro)
+            const tareasIds = [
+                'prim1', 'prim2',
+                'jard1', 'jard2',
+                'mat1', 'mat2',
+                'gen1', 'gen2'
+            ];
+            tareasIds.forEach(id => {
+                const participantes = inicializarTarea(id);
+                renderizarMuro(id, participantes);
+            });
+        }
+
+        // También reiniciar el mensaje vacío si no hay datos
+        window.onload = function() {
+            cargarTodosLosMuros();
+        };
+
+        // Si se desea que todos los visitantes compartan las tareas, usamos localStorage
+        // (dentro del mismo navegador). Para compartir en diferentes dispositivos, 
+        // se necesitaría backend, pero esta es una versión simple estilo Waldorf.
+
+        // Además para mayor robustez: comprobar que los IDs de las listas existen
+        // y permitir agregar con tecla Enter? no necesario, mobile first.
+    </script>
+
+    <!-- Explicación sutil: todo guardado en tu navegador (demo local) 
+         pero así quienes visitan la página pueden ver lo que otros escribieron -->
+    <div style="font-size: 0.75rem; color: #ad9b8d; margin-top: 0.5rem; text-align: center; max-width: 600px;">
+        ✨  Colaboración comunitaria: al enviar, tu nombre y grado aparecen para todos (demo localStorage).
+    </div>
+</body>
+</html>

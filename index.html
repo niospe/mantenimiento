@@ -24,7 +24,7 @@
         }
 
         .waldorf-wrapper {
-            max-width: 900px;
+            max-width: 1000px;
             width: 100%;
         }
 
@@ -65,6 +65,15 @@
             line-height: 1.2;
         }
 
+        h3 {
+            font-size: 1.4rem;
+            font-weight: 360;
+            color: #6b4f3c;
+            margin: 1.2rem 0 0.8rem 0;
+            padding-left: 0.5rem;
+            border-bottom: 2px dotted #d9b8a4;
+        }
+
         .subtitulo-detalle {
             font-size: 0.95rem;
             font-weight: 400;
@@ -74,6 +83,18 @@
             padding-left: 1.2rem;
             font-style: italic;
             border-left: 3px solid #e2cfbc;
+        }
+
+        .grado-tag {
+            background: #e2cfbc;
+            color: #4a3729;
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            display: inline-block;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            border: 1px solid #c7aa82;
         }
 
         .task-list {
@@ -98,6 +119,15 @@
             margin-bottom: 0.8rem;
             border-bottom: 1px dashed #d9b8a4;
             padding-bottom: 0.5rem;
+        }
+
+        .task-responsable {
+            font-size: 0.9rem;
+            color: #8f6e5c;
+            margin-top: -0.3rem;
+            margin-bottom: 0.8rem;
+            font-style: italic;
+            padding-left: 0.3rem;
         }
 
         .contribution-form {
@@ -213,7 +243,7 @@
 
         @media (min-width: 640px) {
             body { padding: 2rem; }
-            .waldorf-wrapper { max-width: 1100px; }
+            .waldorf-wrapper { max-width: 1200px; }
             .form-row { flex-wrap: nowrap; }
         }
 
@@ -302,13 +332,396 @@
             </div>
         </section>
 
-        <!-- =========== JARDÍN - MATERIALES =========== -->
+        <!-- =========== PRIMARIA 1° - LAURARO =========== -->
+        <section class="area">
+            <h2>📘 1° · Lauraro</h2>
+            <div class="task-list">
+                <div class="task-item">
+                    <span class="task-name">🏖️ Arenero colocar lona (Amalin)</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-prim1a1"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-prim1a1"></div>
+                        <button class="btn" onclick="agregarColaborador('prim1a1', 'Arenero colocar lona')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-prim1a1">
+                        <ul class="participant-list" id="list-prim1a1"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">🌉 Arreglar puente (Piti)</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-prim1a2"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-prim1a2"></div>
+                        <button class="btn" onclick="agregarColaborador('prim1a2', 'Arreglar puente')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-prim1a2">
+                        <ul class="participant-list" id="list-prim1a2"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">🧺 Lavar cortinas</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-prim1a3"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-prim1a3"></div>
+                        <button class="btn" onclick="agregarColaborador('prim1a3', 'Lavar cortinas 1°')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-prim1a3">
+                        <ul class="participant-list" id="list-prim1a3"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">🪑 Traer bancos y sillas que se llevaron</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-prim1a4"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-prim1a4"></div>
+                        <button class="btn" onclick="agregarColaborador('prim1a4', 'Traer bancos y sillas')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-prim1a4">
+                        <ul class="participant-list" id="list-prim1a4"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">🚪 Terminar de arreglar puertas contra vidrios, aplicar segunda mano de cetol, poner tope en puerta principal</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-prim1a5"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-prim1a5"></div>
+                        <button class="btn" onclick="agregarColaborador('prim1a5', 'Arreglar puertas contra vidrios')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-prim1a5">
+                        <ul class="participant-list" id="list-prim1a5"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =========== PRIMARIA 2° - GABRIELA =========== -->
+        <section class="area">
+            <h2>📘 2° · Gabriela</h2>
+            <div class="task-list">
+                <div class="task-item">
+                    <span class="task-name">🪟 Poner contra vidrios</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-prim2a1"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-prim2a1"></div>
+                        <button class="btn" onclick="agregarColaborador('prim2a1', 'Poner contra vidrios')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-prim2a1">
+                        <ul class="participant-list" id="list-prim2a1"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">🎨 Aplicar segunda mano de cetol a puertas y ventanas</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-prim2a2"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-prim2a2"></div>
+                        <button class="btn" onclick="agregarColaborador('prim2a2', 'Segunda mano cetol')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-prim2a2">
+                        <ul class="participant-list" id="list-prim2a2"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">🪑 Entregar bancos y sillas que se llevaron</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-prim2a3"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-prim2a3"></div>
+                        <button class="btn" onclick="agregarColaborador('prim2a3', 'Entregar bancos y sillas')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-prim2a3">
+                        <ul class="participant-list" id="list-prim2a3"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">📋 Entregar pizarrón y colocarlo</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-prim2a4"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-prim2a4"></div>
+                        <button class="btn" onclick="agregarColaborador('prim2a4', 'Entregar y colocar pizarrón')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-prim2a4">
+                        <ul class="participant-list" id="list-prim2a4"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">🧺 Lavar cortinas</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-prim2a5"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-prim2a5"></div>
+                        <button class="btn" onclick="agregarColaborador('prim2a5', 'Lavar cortinas 2°')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-prim2a5">
+                        <ul class="participant-list" id="list-prim2a5"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">📚 Colocar repisas</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-prim2a6"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-prim2a6"></div>
+                        <button class="btn" onclick="agregarColaborador('prim2a6', 'Colocar repisas')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-prim2a6">
+                        <ul class="participant-list" id="list-prim2a6"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =========== PRIMARIA 3° - JULIETA =========== -->
+        <section class="area">
+            <h2>📘 3° · Julieta</h2>
+            <div class="task-list">
+                <div class="task-item">
+                    <span class="task-name">🌀 Colocar ventilador de techo con electricista</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-prim3a1"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-prim3a1"></div>
+                        <button class="btn" onclick="agregarColaborador('prim3a1', 'Colocar ventilador techo')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-prim3a1">
+                        <ul class="participant-list" id="list-prim3a1"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">🪟 Acondicionar marcos puerta ventana</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-prim3a2"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-prim3a2"></div>
+                        <button class="btn" onclick="agregarColaborador('prim3a2', 'Acondicionar marcos')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-prim3a2">
+                        <ul class="participant-list" id="list-prim3a2"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">📏 Poner chapadur 3 mm en puerta ventanas pintarlas de blanco</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-prim3a3"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-prim3a3"></div>
+                        <button class="btn" onclick="agregarColaborador('prim3a3', 'Chapadur puertas ventanas')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-prim3a3">
+                        <ul class="participant-list" id="list-prim3a3"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">🏛️ Cubrir con chapadur 3 mm la columna a la que se le sacó el revestimiento</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-prim3a4"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-prim3a4"></div>
+                        <button class="btn" onclick="agregarColaborador('prim3a4', 'Cubrir columna chapadur')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-prim3a4">
+                        <ul class="participant-list" id="list-prim3a4"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">🧺 Lavar cortinas</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-prim3a5"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-prim3a5"></div>
+                        <button class="btn" onclick="agregarColaborador('prim3a5', 'Lavar cortinas 3°')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-prim3a5">
+                        <ul class="participant-list" id="list-prim3a5"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">📋 Cambiar chapadur pizarrón y colocarlo (Jorge)</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-prim3a6"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-prim3a6"></div>
+                        <button class="btn" onclick="agregarColaborador('prim3a6', 'Cambiar chapadur pizarrón')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-prim3a6">
+                        <ul class="participant-list" id="list-prim3a6"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">🏠 Colocar piso donde se sacó</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-prim3a7"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-prim3a7"></div>
+                        <button class="btn" onclick="agregarColaborador('prim3a7', 'Colocar piso')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-prim3a7">
+                        <ul class="participant-list" id="list-prim3a7"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =========== PRIMARIA 4° - FELICITAS =========== -->
+        <section class="area">
+            <h2>📘 4° · Felicitas</h2>
+            <div class="task-list">
+                <div class="task-item">
+                    <span class="task-name">📋 Cambiar chapadur pizarrón y colocarlo (Jorge)</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-prim4a1"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-prim4a1"></div>
+                        <button class="btn" onclick="agregarColaborador('prim4a1', 'Cambiar chapadur pizarrón 4°')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-prim4a1">
+                        <ul class="participant-list" id="list-prim4a1"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">🪵 Lijar y pintar puertas ventanas de madera</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-prim4a2"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-prim4a2"></div>
+                        <button class="btn" onclick="agregarColaborador('prim4a2', 'Lijar y pintar puertas')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-prim4a2">
+                        <ul class="participant-list" id="list-prim4a2"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">🪑 Limpiar, lijar y pintar sillas y bancos</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-prim4a3"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-prim4a3"></div>
+                        <button class="btn" onclick="agregarColaborador('prim4a3', 'Limpiar lijar pintar sillas')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-prim4a3">
+                        <ul class="participant-list" id="list-prim4a3"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =========== PRIMARIA 5° - MARIANA =========== -->
+        <section class="area">
+            <h2>📘 5° · Mariana</h2>
+            <div class="task-list">
+                <div class="task-item">
+                    <span class="task-name">🎨 Pintar marcos de ventana</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-prim5a1"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-prim5a1"></div>
+                        <button class="btn" onclick="agregarColaborador('prim5a1', 'Pintar marcos ventana')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-prim5a1">
+                        <ul class="participant-list" id="list-prim5a1"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">🪵 Pintar segunda mano de barniz a puertas</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-prim5a2"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-prim5a2"></div>
+                        <button class="btn" onclick="agregarColaborador('prim5a2', 'Segunda mano barniz puertas')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-prim5a2">
+                        <ul class="participant-list" id="list-prim5a2"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">🪑 Entregar bancos y sillas</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-prim5a3"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-prim5a3"></div>
+                        <button class="btn" onclick="agregarColaborador('prim5a3', 'Entregar bancos sillas 5°')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-prim5a3">
+                        <ul class="participant-list" id="list-prim5a3"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">🧺 Lavar cortinas</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-prim5a4"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-prim5a4"></div>
+                        <button class="btn" onclick="agregarColaborador('prim5a4', 'Lavar cortinas 5°')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-prim5a4">
+                        <ul class="participant-list" id="list-prim5a4"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =========== PRIMARIA 6° - ALEJANDRA =========== -->
+        <section class="area">
+            <h2>📘 6° · Alejandra</h2>
+            <div class="task-list">
+                <div class="task-item">
+                    <span class="task-name">🪟 Acondicionar marcos puerta ventana</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-prim6a1"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-prim6a1"></div>
+                        <button class="btn" onclick="agregarColaborador('prim6a1', 'Acondicionar marcos 6°')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-prim6a1">
+                        <ul class="participant-list" id="list-prim6a1"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">📏 Poner chapadur 3 mm en puerta ventanas pintarlas de blanco</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-prim6a2"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-prim6a2"></div>
+                        <button class="btn" onclick="agregarColaborador('prim6a2', 'Chapadur puertas 6°')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-prim6a2">
+                        <ul class="participant-list" id="list-prim6a2"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">🏛️ Cubrir con chapadur 3 mm la columna a la que se le sacó el revestimiento</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-prim6a3"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-prim6a3"></div>
+                        <button class="btn" onclick="agregarColaborador('prim6a3', 'Cubrir columna 6°')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-prim6a3">
+                        <ul class="participant-list" id="list-prim6a3"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">💨 Limpiar filtros de aire acondicionado (nuevamente)</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-prim6a4"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-prim6a4"></div>
+                        <button class="btn" onclick="agregarColaborador('prim6a4', 'Limpiar filtros aire')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-prim6a4">
+                        <ul class="participant-list" id="list-prim6a4"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">🧺 Lavar cortinas</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-prim6a5"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-prim6a5"></div>
+                        <button class="btn" onclick="agregarColaborador('prim6a5', 'Lavar cortinas 6°')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-prim6a5">
+                        <ul class="participant-list" id="list-prim6a5"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">🪑 Entregar sillas y bancos</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-prim6a6"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-prim6a6"></div>
+                        <button class="btn" onclick="agregarColaborador('prim6a6', 'Entregar sillas bancos 6°')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-prim6a6">
+                        <ul class="participant-list" id="list-prim6a6"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =========== JARDÍN - MATERIALES (se mantiene) =========== -->
         <section class="area">
             <h2>🌼 Jardín · Materiales</h2>
             <div class="subtitulo-detalle">Lista de materiales jardín</div>
             <div class="task-list">
                 <div class="task-item">
-                    <span class="task-name">🪵 Protectores para calefactores (listones de pino)</span>
+                    <span class="task-name">🪵 Protectores para los calefactores (listones de pino)</span>
                     <div class="contribution-form">
                         <div class="form-row"><label>Nombre</label><input type="text" id="nombre-jard-mat1"></div>
                         <div class="form-row"><label>Grado</label><input type="text" id="grado-jard-mat1"></div>
@@ -352,7 +765,7 @@
                     </div>
                 </div>
                 <div class="task-item">
-                    <span class="task-name">🧻 Dos dispenser acero inoxidable para toallas de papel (baños)</span>
+                    <span class="task-name">🧻 Dos dispenser de acero inoxidable para toallas de papel para baños</span>
                     <div class="contribution-form">
                         <div class="form-row"><label>Nombre</label><input type="text" id="nombre-jard-mat5"></div>
                         <div class="form-row"><label>Grado</label><input type="text" id="grado-jard-mat5"></div>
@@ -363,7 +776,7 @@
                     </div>
                 </div>
                 <div class="task-item">
-                    <span class="task-name">🧻 Tres dispenser acero inoxidable para papel higiénico (baños)</span>
+                    <span class="task-name">🧻 Tres dispenser de acero inoxidable para papel higiénico baños</span>
                     <div class="contribution-form">
                         <div class="form-row"><label>Nombre</label><input type="text" id="nombre-jard-mat6"></div>
                         <div class="form-row"><label>Grado</label><input type="text" id="grado-jard-mat6"></div>
@@ -385,7 +798,7 @@
                     </div>
                 </div>
                 <div class="task-item">
-                    <span class="task-name">🐢 Tortuguita exterior para reponer (puerta sala de Ana)</span>
+                    <span class="task-name">🐢 Tortuguita exterior para reponer en la puerta de la sala de Ana</span>
                     <div class="contribution-form">
                         <div class="form-row"><label>Nombre</label><input type="text" id="nombre-jard-mat8"></div>
                         <div class="form-row"><label>Grado</label><input type="text" id="grado-jard-mat8"></div>
@@ -576,7 +989,7 @@
             </div>
         </section>
 
-        <!-- =========== GENERAL - PENDIENTES =========== -->
+        <!-- =========== GENERAL (TAREAS ANTERIORES) =========== -->
         <section class="area">
             <h2>🛠️ General</h2>
             <div class="subtitulo-detalle">Lista de pendientes a finalizar</div>
@@ -639,204 +1052,270 @@
             </div>
         </section>
 
+        <!-- =========== GENERAL NUEVAS TAREAS =========== -->
+        <section class="area">
+            <h2>🛠️ General · Tareas adicionales</h2>
+            <div class="task-list">
+                <div class="task-item">
+                    <span class="task-name">🎨 Terminar de pintar patio</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-gen6"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-gen6"></div>
+                        <button class="btn" onclick="agregarColaborador('gen6', 'Terminar de pintar patio')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-gen6">
+                        <ul class="participant-list" id="list-gen6"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">🏗️ Sacar piso patio primaria (al lado de la construcción)</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-gen7"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-gen7"></div>
+                        <button class="btn" onclick="agregarColaborador('gen7', 'Sacar piso patio primaria')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-gen7">
+                        <ul class="participant-list" id="list-gen7"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">🧼 Limpiar pasillo de entrada con esponja mágica</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-gen8"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-gen8"></div>
+                        <button class="btn" onclick="agregarColaborador('gen8', 'Limpiar pasillo esponja mágica')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-gen8">
+                        <ul class="participant-list" id="list-gen8"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">🌳 Acondicionar espacios verdes (Podar, cortar pasto)</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-gen9"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-gen9"></div>
+                        <button class="btn" onclick="agregarColaborador('gen9', 'Acondicionar espacios verdes')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-gen9">
+                        <ul class="participant-list" id="list-gen9"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">🚜 Sacar escombros</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-gen10"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-gen10"></div>
+                        <button class="btn" onclick="agregarColaborador('gen10', 'Sacar escombros')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-gen10">
+                        <ul class="participant-list" id="list-gen10"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <footer>
-            🌟 Jornada Waldorf · 9 a 15 · Sumate con tu nombre y grado · Todos ven la misma lista
+            🌟 Jornada Waldorf · Sumate con tu nombre y grado · Todos ven la misma lista
         </footer>
     </div>
 
-  
-<script>
-    // --------------------------------------------------------------
-    // CONFIGURACIÓN - ¡REEMPLAZA CON TUS URLs DE GOOGLE SHEETS!
-    // --------------------------------------------------------------
-    const CONFIG = {
-           CSV_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSxvEliqsj2N2PbI8qXaUcMSem0vBUrXdo5ucBYsySuYqxGvJHNMS6BBhLIcGthrmRVx1Up1iSJ2SdM/pub?gid=634978238&single=true&output=csv',
+    <script>
+        // --------------------------------------------------------------
+        // CONFIGURACIÓN - ¡REEMPLAZA CON TUS URLs DE GOOGLE SHEETS!
+        // --------------------------------------------------------------
+        const CONFIG = {
+            CSV_URL: ''https://docs.google.com/spreadsheets/d/e/2PACX-1vSxvEliqsj2N2PbI8qXaUcMSem0vBUrXdo5ucBYsySuYqxGvJHNMS6BBhLIcGthrmRVx1Up1iSJ2SdM/pub?gid=634978238&single=true&output=csv'',
             APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbxwqP_mX7t0vKsiP12GvkaUphGTHSuw5oHRwAigG1MuxJnVsVccCjiJR6wBtfjIB5huQA/exec'
         };
-
     // Lista completa de TODAS las tareas
-    const TAREAS = [
-        'prim1', 'prim2', 'prim3', 'prim4',
-        'jard-mat1', 'jard-mat2', 'jard-mat3', 'jard-mat4', 'jard-mat5', 'jard-mat6', 'jard-mat7', 'jard-mat8',
-        'mat1', 'mat2', 'mat3',
-        'jard-pen1', 'jard-pen2', 'jard-pen3', 'jard-pen4', 'jard-pen5', 'jard-pen6', 'jard-pen7',
-        'pre1', 'pre2', 'pre3', 'pre4',
-        'gen1', 'gen2', 'gen3', 'gen4', 'gen5'
-    ];
+        const TAREAS = [
+            'prim1', 'prim2', 'prim3', 'prim4',
+            'prim1a1', 'prim1a2', 'prim1a3', 'prim1a4', 'prim1a5',
+            'prim2a1', 'prim2a2', 'prim2a3', 'prim2a4', 'prim2a5', 'prim2a6',
+            'prim3a1', 'prim3a2', 'prim3a3', 'prim3a4', 'prim3a5', 'prim3a6', 'prim3a7',
+            'prim4a1', 'prim4a2', 'prim4a3',
+            'prim5a1', 'prim5a2', 'prim5a3', 'prim5a4',
+            'prim6a1', 'prim6a2', 'prim6a3', 'prim6a4', 'prim6a5', 'prim6a6',
+            'jard-mat1', 'jard-mat2', 'jard-mat3', 'jard-mat4', 'jard-mat5', 'jard-mat6', 'jard-mat7', 'jard-mat8',
+            'mat1', 'mat2', 'mat3',
+            'jard-pen1', 'jard-pen2', 'jard-pen3', 'jard-pen4', 'jard-pen5', 'jard-pen6', 'jard-pen7',
+            'pre1', 'pre2', 'pre3', 'pre4',
+            'gen1', 'gen2', 'gen3', 'gen4', 'gen5',
+            'gen6', 'gen7', 'gen8', 'gen9', 'gen10'
+        ];
 
-    // Estado de la aplicación
-    let colaboradores = {};
-    const statusMsg = document.getElementById('status-message');
+        // Estado de la aplicación
+        let colaboradores = {};
+        const statusMsg = document.getElementById('status-message');
 
-    // Inicializar estructura vacía
-    TAREAS.forEach(t => colaboradores[t] = []);
+        // Inicializar estructura vacía
+        TAREAS.forEach(t => colaboradores[t] = []);
 
-    // --------------------------------------------------------------
-    // LEER DATOS DESDE GOOGLE SHEETS (CSV) - SOLO UNA VEZ AL INICIO
-    // --------------------------------------------------------------
-    async function cargarDatosIniciales() {
-        try {
-            statusMsg.textContent = '📖 Leyendo mural comunitario...';
-            const response = await fetch(CONFIG.CSV_URL);
-            const csv = await response.text();
-            
-            // Resetear datos
-            TAREAS.forEach(t => colaboradores[t] = []);
-            
-            // Parsear CSV
-            const lineas = csv.split('\n');
-            for (let i = 1; i < lineas.length; i++) {
-                if (!lineas[i].trim()) continue;
+        // --------------------------------------------------------------
+        // LEER DATOS DESDE GOOGLE SHEETS (CSV) - SOLO UNA VEZ
+        // --------------------------------------------------------------
+        async function cargarDatosIniciales() {
+            try {
+                statusMsg.textContent = '📖 Leyendo mural comunitario...';
+                const response = await fetch(CONFIG.CSV_URL);
+                const csv = await response.text();
                 
-                const cols = lineas[i].split(',');
-                if (cols.length >= 3) {
-                    const tareaId = cols[0].replace(/"/g, '').trim();
-                    const nombre = cols[1].replace(/"/g, '').trim();
-                    const grado = cols[2].replace(/"/g, '').trim();
+                // Resetear datos
+                TAREAS.forEach(t => colaboradores[t] = []);
+                
+                // Parsear CSV
+                const lineas = csv.split('\n');
+                for (let i = 1; i < lineas.length; i++) {
+                    if (!lineas[i].trim()) continue;
                     
-                    if (TAREAS.includes(tareaId)) {
-                        if (!colaboradores[tareaId]) colaboradores[tareaId] = [];
-                        colaboradores[tareaId].push({ nombre, grado });
+                    const cols = lineas[i].split(',');
+                    if (cols.length >= 3) {
+                        const tareaId = cols[0].replace(/"/g, '').trim();
+                        const nombre = cols[1].replace(/"/g, '').trim();
+                        const grado = cols[2].replace(/"/g, '').trim();
+                        
+                        if (TAREAS.includes(tareaId)) {
+                            if (!colaboradores[tareaId]) colaboradores[tareaId] = [];
+                            colaboradores[tareaId].push({ nombre, grado });
+                        }
                     }
+                }
+                
+                // Guardar en localStorage como respaldo
+                localStorage.setItem('waldorf_jornada_completa', JSON.stringify(colaboradores));
+                
+                statusMsg.textContent = '✅ Conectado a Google Sheets · datos compartidos';
+                statusMsg.style.background = '#d1e0d2';
+            } catch (error) {
+                console.error('Error cargando CSV:', error);
+                statusMsg.textContent = '⚠️ Usando datos locales. Los cambios se guardarán igual.';
+                statusMsg.style.background = '#eedccb';
+                
+                // Intentar cargar desde localStorage
+                const local = localStorage.getItem('waldorf_jornada_completa');
+                if (local) {
+                    try {
+                        colaboradores = JSON.parse(local);
+                    } catch(e) {}
                 }
             }
             
-            // Guardar en localStorage como respaldo
-            localStorage.setItem('waldorf_jornada', JSON.stringify(colaboradores));
-            
-            statusMsg.textContent = '✅ Conectado a Google Sheets · datos compartidos';
-            statusMsg.style.background = '#d1e0d2';
-        } catch (error) {
-            console.error('Error cargando CSV:', error);
-            statusMsg.textContent = '⚠️ Usando datos locales. Los cambios se guardarán igual.';
-            statusMsg.style.background = '#eedccb';
-            
-            // Intentar cargar desde localStorage
-            const local = localStorage.getItem('waldorf_jornada');
-            if (local) {
-                try {
-                    colaboradores = JSON.parse(local);
-                } catch(e) {}
+            // Actualizar todas las listas
+            TAREAS.forEach(t => renderizarMuro(t));
+        }
+
+        // --------------------------------------------------------------
+        // GUARDAR EN GOOGLE SHEETS (Apps Script)
+        // --------------------------------------------------------------
+        async function guardarEnGoogleSheets(tareaId, nombre, grado) {
+            try {
+                const url = `${CONFIG.APPS_SCRIPT_URL}?tarea=${encodeURIComponent(tareaId)}&nombre=${encodeURIComponent(nombre)}&grado=${encodeURIComponent(grado)}&ts=${Date.now()}`;
+                
+                await fetch(url, {
+                    mode: 'no-cors',
+                    method: 'GET'
+                });
+                
+                console.log('✅ Dato enviado a Google Sheets');
+                return true;
+            } catch (error) {
+                console.error('Error enviando a Google Sheets:', error);
+                return false;
             }
         }
-        
-        // Actualizar todas las listas
-        TAREAS.forEach(t => renderizarMuro(t));
-    }
 
-    // --------------------------------------------------------------
-    // GUARDAR EN GOOGLE SHEETS (Apps Script)
-    // --------------------------------------------------------------
-    async function guardarEnGoogleSheets(tareaId, nombre, grado) {
-        try {
-            const url = `${CONFIG.APPS_SCRIPT_URL}?tarea=${encodeURIComponent(tareaId)}&nombre=${encodeURIComponent(nombre)}&grado=${encodeURIComponent(grado)}&ts=${Date.now()}`;
+        // --------------------------------------------------------------
+        // AGREGAR COLABORADOR (llamado desde botones)
+        // --------------------------------------------------------------
+        window.agregarColaborador = async function(tareaId, descripcion) {
+            // Obtener inputs
+            const nombreInput = document.getElementById(`nombre-${tareaId}`);
+            const gradoInput = document.getElementById(`grado-${tareaId}`);
             
-            await fetch(url, {
-                mode: 'no-cors',
-                method: 'GET'
+            let nombre = nombreInput ? nombreInput.value.trim() : '';
+            let grado = gradoInput ? gradoInput.value.trim() : '';
+            
+            // Validar
+            if (!nombre && !grado) {
+                alert('👋 Escribe al menos tu nombre');
+                return;
+            }
+            
+            nombre = nombre || 'Voluntario';
+            grado = grado || '—';
+            
+            // 1. Guardar LOCALMENTE (inmediato)
+            if (!colaboradores[tareaId]) colaboradores[tareaId] = [];
+            colaboradores[tareaId].push({ nombre, grado });
+            
+            // 2. Guardar en localStorage (persistencia)
+            localStorage.setItem('waldorf_jornada_completa', JSON.stringify(colaboradores));
+            
+            // 3. Renderizar inmediatamente (NO SE BORRA)
+            renderizarMuro(tareaId);
+            
+            // 4. Limpiar inputs
+            if (nombreInput) nombreInput.value = '';
+            if (gradoInput) gradoInput.value = '';
+            
+            // 5. Enviar a Google Sheets (en segundo plano)
+            statusMsg.textContent = '📤 Guardando en mural comunitario...';
+            await guardarEnGoogleSheets(tareaId, nombre, grado);
+            statusMsg.textContent = '✨ ¡Gracias! Tu colaboración ya se guardó';
+            setTimeout(() => statusMsg.textContent = '✅ Conectado a Google Sheets', 2000);
+        };
+
+        // --------------------------------------------------------------
+        // RENDERIZAR MURO DE UNA TAREA
+        // --------------------------------------------------------------
+        function renderizarMuro(tareaId) {
+            const listaUl = document.getElementById(`list-${tareaId}`);
+            if (!listaUl) return;
+            
+            const participantes = colaboradores[tareaId] || [];
+            
+            listaUl.innerHTML = '';
+            
+            if (participantes.length === 0) {
+                const emptyLi = document.createElement('li');
+                emptyLi.className = 'empty-message';
+                emptyLi.textContent = 'Aún sin voluntades · animate';
+                listaUl.appendChild(emptyLi);
+                return;
+            }
+            
+            // Mostrar últimos 5 (más recientes)
+            const ultimos = participantes.slice(-5).reverse();
+            ultimos.forEach(p => {
+                const li = document.createElement('li');
+                li.textContent = `${p.nombre} · ${p.grado}`;
+                listaUl.appendChild(li);
             });
             
-            console.log('✅ Dato enviado a Google Sheets');
-            return true;
-        } catch (error) {
-            console.error('Error enviando a Google Sheets:', error);
-            return false;
-        }
-    }
-
-    // --------------------------------------------------------------
-    // AGREGAR COLABORADOR (llamado desde botones)
-    // --------------------------------------------------------------
-    window.agregarColaborador = async function(tareaId, descripcion) {
-        // Obtener inputs
-        const nombreInput = document.getElementById(`nombre-${tareaId}`);
-        const gradoInput = document.getElementById(`grado-${tareaId}`);
-        
-        let nombre = nombreInput ? nombreInput.value.trim() : '';
-        let grado = gradoInput ? gradoInput.value.trim() : '';
-        
-        // Validar
-        if (!nombre && !grado) {
-            alert('👋 Escribe al menos tu nombre');
-            return;
-        }
-        
-        nombre = nombre || 'Voluntario';
-        grado = grado || '—';
-        
-        // 1. Guardar LOCALMENTE (inmediato)
-        if (!colaboradores[tareaId]) colaboradores[tareaId] = [];
-        colaboradores[tareaId].push({ nombre, grado });
-        
-        // 2. Guardar en localStorage (persistencia)
-        localStorage.setItem('waldorf_jornada', JSON.stringify(colaboradores));
-        
-        // 3. Renderizar inmediatamente (NO SE BORRA)
-        renderizarMuro(tareaId);
-        
-        // 4. Limpiar inputs
-        if (nombreInput) nombreInput.value = '';
-        if (gradoInput) gradoInput.value = '';
-        
-        // 5. Enviar a Google Sheets (en segundo plano, sin afectar la vista)
-        statusMsg.textContent = '📤 Guardando en mural comunitario...';
-        await guardarEnGoogleSheets(tareaId, nombre, grado);
-        statusMsg.textContent = '✨ ¡Gracias! Tu colaboración ya se guardó';
-        setTimeout(() => statusMsg.textContent = '✅ Conectado a Google Sheets', 2000);
-    };
-
-    // --------------------------------------------------------------
-    // RENDERIZAR MURO DE UNA TAREA
-    // --------------------------------------------------------------
-    function renderizarMuro(tareaId) {
-        const listaUl = document.getElementById(`list-${tareaId}`);
-        if (!listaUl) return;
-        
-        const participantes = colaboradores[tareaId] || [];
-        
-        listaUl.innerHTML = '';
-        
-        if (participantes.length === 0) {
-            const emptyLi = document.createElement('li');
-            emptyLi.className = 'empty-message';
-            emptyLi.textContent = 'Aún sin voluntades · animate';
-            listaUl.appendChild(emptyLi);
-            return;
-        }
-        
-        // Mostrar últimos 5 (más recientes)
-        const ultimos = participantes.slice(-5).reverse();
-        ultimos.forEach(p => {
-            const li = document.createElement('li');
-            li.textContent = `${p.nombre} · ${p.grado}`;
-            listaUl.appendChild(li);
-        });
-        
-        if (participantes.length > 5) {
-            const li = document.createElement('li');
-            li.textContent = `... y ${participantes.length - 5} más`;
-            li.style.background = '#f3ede7';
-            listaUl.appendChild(li);
-        }
-    }
-
-    // --------------------------------------------------------------
-    // INICIALIZAR - SIN RECARGA AUTOMÁTICA
-    // --------------------------------------------------------------
-    window.onload = () => {
-        cargarDatosIniciales();
-        
-        // Escuchar cambios en localStorage (misma compu, diferentes pestañas)
-        window.addEventListener('storage', (e) => {
-            if (e.key === 'waldorf_jornada') {
-                // Solo actualizar si el cambio viene de OTRA pestaña
-                try {
-                    colaboradores = JSON.parse(e.newValue);
-                    TAREAS.forEach(t => renderizarMuro(t));
-                } catch(e) {}
+            if (participantes.length > 5) {
+                const li = document.createElement('li');
+                li.textContent = `... y ${participantes.length - 5} más`;
+                li.style.background = '#f3ede7';
+                listaUl.appendChild(li);
             }
-        });
-    };
-</script>
+        }
+
+        // --------------------------------------------------------------
+        // INICIALIZAR - SIN RECARGA AUTOMÁTICA
+        // --------------------------------------------------------------
+        window.onload = () => {
+            cargarDatosIniciales();
+            
+            // Escuchar cambios en localStorage (misma compu, diferentes pestañas)
+            window.addEventListener('storage', (e) => {
+                if (e.key === 'waldorf_jornada_completa') {
+                    try {
+                        colaboradores = JSON.parse(e.newValue);
+                        TAREAS.forEach(t => renderizarMuro(t));
+                    } catch(e) {}
+                }
+            });
+        };
+    </script>
 </body>
 </html>

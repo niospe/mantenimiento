@@ -2,628 +2,81 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=yes">
-    <title>Mantenimiento Waldorf · colaboración viva</title>
-    <!-- Estilo suave, natural, inspirado en pedagogía Waldorf -->
-    <!-- Incluimos Supabase desde CDN (cliente js) -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.7/dist/umd/supabase.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mantenimientos Waldorf</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        /* mobile first – todo fluye desde lo pequeño */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        body { 
+            font-family: 'Quicksand', sans-serif; 
+            background-color: #FFFDF5; 
+            color: #5D544B;
         }
-
-        body {
-            background-color: #f9f3e9;
-            font-family: 'Atkinson Hyperlegible', 'Segoe UI', Roboto, -apple-system, BlinkMacSystemFont, sans-serif;
-            line-height: 1.5;
-            color: #3e2e23;
-            padding: 1rem;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        .card { 
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid #E6D5C3;
+            border-radius: 20px;
         }
-
-        .waldorf-wrapper {
-            max-width: 800px;
-            width: 100%;
-        }
-
-        h1 {
-            font-size: 2.4rem;
-            font-weight: 400;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: #5e4b3a;
-            border-bottom: 3px solid #dbb88c;
-            display: inline-block;
-            padding-bottom: 0.25rem;
-            margin-bottom: 2rem;
-            margin-top: 0.5rem;
-            text-shadow: 2px 2px 0 rgba(235, 205, 167, 0.3);
-            word-break: break-word;
-        }
-
-        .area {
-            background: rgba(255, 247, 240, 0.7);
-            border-radius: 32px 12px 32px 12px;
-            padding: 1.5rem 1.2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 8px 18px -6px rgba(120, 90, 70, 0.12);
-            border: 1px solid #e6d8c5;
-            backdrop-filter: blur(2px);
-        }
-
-        h2 {
-            font-size: 1.8rem;
-            font-weight: 380;
-            color: #7a5a44;
-            margin-bottom: 0.75rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            border-left: 10px solid #c7aa82;
-            padding-left: 0.75rem;
-        }
-
-        .task-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1.2rem;
-            margin-top: 0.8rem;
-        }
-
-        .task-item {
-            background: #fffefc;
-            padding: 1rem 1.1rem;
-            border-radius: 20px 8px 20px 8px;
-            border: 1px solid #eedccb;
-            box-shadow: 3px 3px 0 #e2cfbc;
-            transition: all 0.1s ease;
-        }
-
-        .task-name {
-            font-weight: 600;
-            font-size: 1.2rem;
-            color: #4a3729;
-            display: block;
-            margin-bottom: 0.75rem;
-            border-bottom: 1px dashed #d9b8a4;
-            padding-bottom: 0.4rem;
-        }
-
-        .contribution-form {
-            display: flex;
-            flex-direction: column;
-            gap: 0.7rem;
-            margin: 0.8rem 0 0.6rem;
-        }
-
-        .form-row {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 0.4rem 0.8rem;
-        }
-
-        label {
-            font-size: 0.9rem;
-            color: #69554a;
-            font-weight: 500;
-            min-width: 50px;
-        }
-
-        input {
-            background: #fefcf7;
-            border: 1px solid #d6c0ad;
-            border-radius: 30px;
-            padding: 0.7rem 1rem;
-            font-size: 1rem;
-            flex: 1 1 180px;
-            font-family: inherit;
-            transition: 0.2s;
-            border: 1.5px solid #e3cebc;
-        }
-
-        input:focus {
-            border-color: #b4835c;
-            outline: none;
-            background-color: #fff9f2;
-            box-shadow: 0 0 0 3px rgba(180, 140, 100, 0.15);
-        }
-
-        .btn {
-            background: #ebdac9;
-            border: none;
-            border-radius: 50px;
-            padding: 0.7rem 1.3rem;
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: #3a2e25;
-            border-bottom: 4px solid #bcaa96;
-            align-self: flex-start;
-            transition: 0.07s;
-            letter-spacing: 0.5px;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid #e5cfbc;
-            border-bottom-width: 4px;
-        }
-
-        .btn:hover {
-            background: #e2cfbc;
-            border-bottom-width: 2px;
-            transform: translateY(2px);
-            border-bottom-color: #9f8b7a;
-        }
-
-        .btn:active {
-            transform: translateY(3px);
-            border-bottom-width: 1px;
-        }
-
-        .contributors-wall {
-            margin-top: 1.1rem;
-            background: #f7efe7;
-            padding: 0.9rem 1rem;
-            border-radius: 18px;
-            border-left: 8px solid #c6a882;
-            font-size: 0.95rem;
-        }
-
-        .wall-title {
-            font-weight: 600;
-            color: #624c3c;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            margin-bottom: 0.6rem;
-            font-size: 1rem;
-        }
-
-        .participant-list {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 0.45rem;
-        }
-
-        .participant-list li {
-            background: white;
-            padding: 0.45rem 1rem;
-            border-radius: 30px;
-            border: 1px solid #eddacb;
-            color: #4d3a2e;
-            display: inline-block;
-            width: fit-content;
-            max-width: 100%;
-            word-break: break-word;
-            box-shadow: 1px 2px 0 #dac2b0;
-        }
-
-        .empty-message {
-            color: #957a68;
-            font-style: italic;
-            padding: 0.3rem 0;
-        }
-
-        @media (min-width: 640px) {
-            body {
-                padding: 2rem;
-            }
-            .waldorf-wrapper {
-                max-width: 1000px;
-            }
-            .form-row {
-                flex-wrap: nowrap;
-            }
-            .btn {
-                padding: 0.6rem 2rem;
-            }
-        }
-
-        ::selection {
-            background: #dbb88c;
-            color: #1f1a16;
-        }
-
-        footer {
-            margin-top: 1.5rem;
-            font-size: 0.85rem;
-            color: #8f7a68;
-            text-align: center;
-            border-top: 1px dashed #dac2af;
-            padding-top: 1.8rem;
-        }
-        .connection-status {
-            font-size: 0.75rem;
-            padding: 0.4rem 1rem;
-            background: #eedccb;
-            border-radius: 40px;
-            display: inline-block;
-            margin-bottom: 0.8rem;
-            color: #4a3a2e;
+        .input-waldorf {
+            border: 1px solid #D1BFA7;
+            border-radius: 8px;
+            padding: 4px 8px;
+            background: transparent;
         }
     </style>
 </head>
-<body>
-    <div class="waldorf-wrapper">
-        <h1>MANTENIMIENTOS</h1>
-        <div class="connection-status" id="status-supabase">
-            🌱 Conectando al jardín comunitario...
-        </div>
+<body class="p-6">
 
-        <!-- ********** PRIMARIA ********** -->
-        <section class="area">
-            <h2>📘 Primaria</h2>
-            <div class="task-list">
-                <!-- Tarea 1 Primaria -->
-                <div class="task-item" id="task-prim1">
-                    <span class="task-name">🧹 Barrer y ordenar aulas</span>
-                    <div class="contribution-form">
-                        <div class="form-row">
-                            <label for="nombre-prim1">Nombre</label>
-                            <input type="text" id="nombre-prim1" placeholder="ej. Martina">
-                        </div>
-                        <div class="form-row">
-                            <label for="grado-prim1">Grado</label>
-                            <input type="text" id="grado-prim1" placeholder="3° / 4° B">
-                        </div>
-                        <button class="btn" data-tarea="prim1" data-desc="Limpiar aulas">🌿 Sumar mi ayuda</button>
-                    </div>
-                    <div class="contributors-wall" id="wall-prim1">
-                        <span class="wall-title">👥 Ya colaboran:</span>
-                        <ul class="participant-list" id="list-prim1">
-                            <li class="empty-message">Cargando voluntades...</li>
-                        </ul>
+    <header class="text-center mb-10">
+        <h1 class="text-4xl font-bold tracking-widest text-[#B08EAD]">MANTENIMIENTOS</h1>
+        <p class="text-sm italic mt-2 text-[#A0937D]">Jornadas de cuidado de nuestro espacio</p>
+    </header>
+
+    <main class="max-w-2xl mx-auto space-y-12">
+
+        <section>
+            <h2 class="text-2xl font-semibold mb-4 border-b-2 border-[#D4A373] inline-block">Maternal</h2>
+            <div class="space-y-4">
+                <div class="card p-4 shadow-sm">
+                    <p class="font-medium">Nivelar casita exterior</p>
+                    <div class="mt-2 flex flex-wrap gap-2">
+                        <input type="text" placeholder="Nombre" class="input-waldorf text-sm flex-1">
+                        <input type="text" placeholder="Grado" class="input-waldorf text-sm w-24">
+                        <button class="bg-[#B08EAD] text-white px-4 py-1 rounded-full text-sm">Anotarme</button>
                     </div>
                 </div>
-                <!-- Tarea 2 Primaria -->
-                <div class="task-item" id="task-prim2">
-                    <span class="task-name">📦 Revisar materiales de arte</span>
-                    <div class="contribution-form">
-                        <div class="form-row">
-                            <label for="nombre-prim2">Nombre</label>
-                            <input type="text" id="nombre-prim2" placeholder="ej. Juan">
-                        </div>
-                        <div class="form-row">
-                            <label for="grado-prim2">Grado</label>
-                            <input type="text" id="grado-prim2" placeholder="5° A">
-                        </div>
-                        <button class="btn" data-tarea="prim2" data-desc="Revisar materiales">🌿 Sumar mi ayuda</button>
-                    </div>
-                    <div class="contributors-wall" id="wall-prim2">
-                        <span class="wall-title">👥 Ya colaboran:</span>
-                        <ul class="participant-list" id="list-prim2">
-                            <li class="empty-message">Cargando voluntades...</li>
-                        </ul>
-                    </div>
                 </div>
+        </section>
+
+        <section>
+            <h2 class="text-2xl font-semibold mb-4 border-b-2 border-[#BCBD8B] inline-block">Jardín</h2>
+            <div class="space-y-4 text-sm">
+                <p>• Colocar azulejos sala Ana</p>
+                <p>• Lijar tobogán chico de mangrullo</p>
+                <p>• Aplicar segunda mano de Cetol</p>
             </div>
         </section>
 
-        <!-- ********** JARDÍN ********** -->
-        <section class="area">
-            <h2>🌼 Jardín</h2>
-            <div class="task-list">
-                <div class="task-item" id="task-jard1">
-                    <span class="task-name">🧸 Lavado de juegos didácticos</span>
-                    <div class="contribution-form">
-                        <div class="form-row">
-                            <label for="nombre-jard1">Nombre</label>
-                            <input type="text" id="nombre-jard1" placeholder="Nombre">
-                        </div>
-                        <div class="form-row">
-                            <label for="grado-jard1">Grado</label>
-                            <input type="text" id="grado-jard1" placeholder="sala de 4">
-                        </div>
-                        <button class="btn" data-tarea="jard1" data-desc="Lavar juegos">🌿 Sumar mi ayuda</button>
-                    </div>
-                    <div class="contributors-wall" id="wall-jard1">
-                        <span class="wall-title">👥 Ya colaboran:</span>
-                        <ul class="participant-list" id="list-jard1">
-                            <li class="empty-message">Cargando voluntades...</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="task-item" id="task-jard2">
-                    <span class="task-name">🌱 Regar y cuidar macetas</span>
-                    <div class="contribution-form">
-                        <div class="form-row">
-                            <label for="nombre-jard2">Nombre</label>
-                            <input type="text" id="nombre-jard2" placeholder="Nombre">
-                        </div>
-                        <div class="form-row">
-                            <label for="grado-jard2">Grado</label>
-                            <input type="text" id="grado-jard2" placeholder="sala verde">
-                        </div>
-                        <button class="btn" data-tarea="jard2" data-desc="Cuidar plantas">🌿 Sumar mi ayuda</button>
-                    </div>
-                    <div class="contributors-wall" id="wall-jard2">
-                        <span class="wall-title">👥 Ya colaboran:</span>
-                        <ul class="participant-list" id="list-jard2">
-                            <li class="empty-message">Cargando voluntades...</li>
-                        </ul>
-                    </div>
-                </div>
+        <section>
+            <h2 class="text-2xl font-semibold mb-4 border-b-2 border-[#8DA9C4] inline-block">Primaria</h2>
+            <div class="card p-4 italic text-sm">
+                <strong>Herramientas necesarias:</strong> Percutora, Herramientas de jardinería, Taladro.
             </div>
         </section>
 
-        <!-- ********** MATERNAL ********** -->
-        <section class="area">
-            <h2>🍼 Maternal</h2>
-            <div class="task-list">
-                <div class="task-item" id="task-mat1">
-                    <span class="task-name">🧴 Reponer pañales/toallitas</span>
-                    <div class="contribution-form">
-                        <div class="form-row">
-                            <label for="nombre-mat1">Nombre</label>
-                            <input type="text" id="nombre-mat1" placeholder="Nombre">
-                        </div>
-                        <div class="form-row">
-                            <label for="grado-mat1">Grado</label>
-                            <input type="text" id="grado-mat1" placeholder="lactantes">
-                        </div>
-                        <button class="btn" data-tarea="mat1" data-desc="Reponer pañales">🌿 Sumar mi ayuda</button>
-                    </div>
-                    <div class="contributors-wall" id="wall-mat1">
-                        <span class="wall-title">👥 Ya colaboran:</span>
-                        <ul class="participant-list" id="list-mat1">
-                            <li class="empty-message">Cargando voluntades...</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="task-item" id="task-mat2">
-                    <span class="task-name">🧸 Esterilizar chupetes</span>
-                    <div class="contribution-form">
-                        <div class="form-row">
-                            <label for="nombre-mat2">Nombre</label>
-                            <input type="text" id="nombre-mat2" placeholder="Nombre">
-                        </div>
-                        <div class="form-row">
-                            <label for="grado-mat2">Grado</label>
-                            <input type="text" id="grado-mat2" placeholder="bebés">
-                        </div>
-                        <button class="btn" data-tarea="mat2" data-desc="Esterilizar">🌿 Sumar mi ayuda</button>
-                    </div>
-                    <div class="contributors-wall" id="wall-mat2">
-                        <span class="wall-title">👥 Ya colaboran:</span>
-                        <ul class="participant-list" id="list-mat2">
-                            <li class="empty-message">Cargando voluntades...</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+        <section>
+            <h2 class="text-2xl font-semibold mb-4 border-b-2 border-[#C9ADA7] inline-block">General</h2>
+            <ul class="list-disc ml-5 space-y-2">
+                <li>Instalar mingitorio</li>
+                <li>Cambiar tapas de inodoros</li>
+            </ul>
         </section>
 
-        <!-- ********** GENERAL ********** -->
-        <section class="area">
-            <h2>🛠️ General</h2>
-            <div class="task-list">
-                <div class="task-item" id="task-gen1">
-                    <span class="task-name">💡 Cambiar luces fundidas</span>
-                    <div class="contribution-form">
-                        <div class="form-row">
-                            <label for="nombre-gen1">Nombre</label>
-                            <input type="text" id="nombre-gen1" placeholder="Nombre">
-                        </div>
-                        <div class="form-row">
-                            <label for="grado-gen1">Grado</label>
-                            <input type="text" id="grado-gen1" placeholder="docente / 6°">
-                        </div>
-                        <button class="btn" data-tarea="gen1" data-desc="Cambiar luces">🌿 Sumar mi ayuda</button>
-                    </div>
-                    <div class="contributors-wall" id="wall-gen1">
-                        <span class="wall-title">👥 Ya colaboran:</span>
-                        <ul class="participant-list" id="list-gen1">
-                            <li class="empty-message">Cargando voluntades...</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="task-item" id="task-gen2">
-                    <span class="task-name">🧹 Limpieza de jardín exterior</span>
-                    <div class="contribution-form">
-                        <div class="form-row">
-                            <label for="nombre-gen2">Nombre</label>
-                            <input type="text" id="nombre-gen2" placeholder="Nombre">
-                        </div>
-                        <div class="form-row">
-                            <label for="grado-gen2">Grado</label>
-                            <input type="text" id="grado-gen2" placeholder="familia">
-                        </div>
-                        <button class="btn" data-tarea="gen2" data-desc="Jardín exterior">🌿 Sumar mi ayuda</button>
-                    </div>
-                    <div class="contributors-wall" id="wall-gen2">
-                        <span class="wall-title">👥 Ya colaboran:</span>
-                        <ul class="participant-list" id="list-gen2">
-                            <li class="empty-message">Cargando voluntades...</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <footer>
-            🌟 comunidad Waldorf — cada pequeña tarea sostiene el jardín (datos compartidos en tiempo real)
-        </footer>
-    </div>
+    </main>
 
-    <script>
-        // --------------------------------------------------------------
-        //   SUPABASE · CONFIGURACIÓN LLAVES PÚBLICAS (ANON)
-        //   Proyecto demo para uso comunitario. Totalmente funcional.
-        //   Los datos son visibles por todos los visitantes.
-        // --------------------------------------------------------------
-        const SUPABASE_URL = 'https://lwhqtqdoyioygoblvmmd.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx3aHF0cWRveWlveWdvYmx2bW1kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA4NjM3NjgsImV4cCI6MjA4NjQzOTc2OH0.6L_AZN3Hy9FeoB8ba8EoThwWlCs0OGXwvMhW5wJ1ZHU'
-        // Inicializar cliente Supabase
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        const statusEl = document.getElementById('status-supabase');
+    <footer class="mt-20 text-center text-xs text-[#A0937D]">
+        Mantenimiento Colectivo • 2026
+    </footer>
 
-        // Tabla: "colaboradores" con columnas: id (serial), tarea_id (text), nombre (text), grado (text), created_at
-        // Esta tabla debe existir en tu proyecto. Pero como es una demo con proyecto público, ya está creada.
-        // Todos pueden insertar y leer. La política es: anon insert, anon select.
-        
-        // Lista de todas las tareas (IDs)
-        const TAREAS = ['prim1', 'prim2', 'jard1', 'jard2', 'mat1', 'mat2', 'gen1', 'gen2'];
-
-        // --- Escucha en tiempo real (real-time) ---
-        // Suscribirse a cambios en la tabla 'colaboradores'
-        const subscription = supabase
-            .channel('waldorf-changes')
-            .on('postgres_changes', 
-                { event: '*', schema: 'public', table: 'colaboradores' }, 
-                (payload) => {
-                    // Cuando hay cualquier cambio (INSERT, UPDATE, DELETE) recargamos todas las tareas
-                    // Para mantener simple: volver a cargar todas las listas
-                    cargarTodasLasTareas();
-                })
-            .subscribe((status) => {
-                if (status === 'SUBSCRIBED') {
-                    statusEl.textContent = '🌿 Conectado · comunidad en tiempo real';
-                    statusEl.style.background = '#d1e0d2';
-                } else {
-                    statusEl.textContent = '🔄 Reconectando al jardín comunitario...';
-                }
-            });
-
-        // --- cargar participantes de UNA tarea y renderizar el muro ---
-        async function cargarParticipantes(tareaId) {
-            try {
-                const { data, error } = await supabase
-                    .from('colaboradores')
-                    .select('nombre, grado, created_at')
-                    .eq('tarea_id', tareaId)
-                    .order('created_at', { ascending: true });
-
-                if (error) {
-                    console.error('Error al cargar:', error);
-                    return;
-                }
-
-                // Renderizar el muro
-                const listaUl = document.getElementById(`list-${tareaId}`);
-                if (!listaUl) return;
-
-                listaUl.innerHTML = '';
-                if (!data || data.length === 0) {
-                    const emptyLi = document.createElement('li');
-                    emptyLi.className = 'empty-message';
-                    emptyLi.textContent = 'Aún sin voluntades · anímate';
-                    listaUl.appendChild(emptyLi);
-                } else {
-                    data.forEach(p => {
-                        const li = document.createElement('li');
-                        li.textContent = `${p.nombre || 'Voluntario'} · ${p.grado || 'grado'}`;
-                        listaUl.appendChild(li);
-                    });
-                }
-            } catch (e) {
-                console.warn('Error en carga', e);
-            }
-        }
-
-        // --- cargar todas las tareas ---
-        async function cargarTodasLasTareas() {
-            for (const tareaId of TAREAS) {
-                await cargarParticipantes(tareaId);
-            }
-        }
-
-        // --- agregar nuevo colaborador ---
-        async function agregarParticipante(tareaId, descripcionTarea) {
-            const nombreInput = document.getElementById(`nombre-${tareaId}`);
-            const gradoInput = document.getElementById(`grado-${tareaId}`);
-
-            let nombre = nombreInput ? nombreInput.value.trim() : '';
-            let grado = gradoInput ? gradoInput.value.trim() : '';
-
-            if (nombre === '' && grado === '') {
-                alert('👋 Escribe al menos tu nombre o grado para sumarte');
-                return;
-            }
-            if (nombre === '') nombre = 'Voluntario/a';
-            if (grado === '') grado = '—';
-
-            // Insertar en Supabase
-            try {
-                statusEl.textContent = '📨 Enviando colaboración...';
-                const { error } = await supabase
-                    .from('colaboradores')
-                    .insert([
-                        { 
-                            tarea_id: tareaId, 
-                            nombre: nombre, 
-                            grado: grado 
-                        }
-                    ]);
-
-                if (error) {
-                    console.error(error);
-                    alert('No se pudo enviar. Intenta de nuevo 🙏');
-                    statusEl.textContent = '🌱 Error al enviar, pero puedes reintentar';
-                    return;
-                }
-
-                // Limpiar inputs
-                if (nombreInput) nombreInput.value = '';
-                if (gradoInput) gradoInput.value = '';
-
-                statusEl.textContent = '✨ ¡Gracias por sumarte!';
-                setTimeout(() => {
-                    statusEl.textContent = '🌿 Conectado · comunidad en tiempo real';
-                }, 2500);
-                
-                // No necesitamos cargar manualmente porque el webhook de realtime actualizará.
-                // pero por si acaso, llamamos a cargar la tarea específica (se actualizará doble pero no importa)
-                cargarParticipantes(tareaId);
-            } catch(err) {
-                alert('Error de conexión, pero puedes intentar otra vez');
-                statusEl.textContent = '⚠️ Problema de red';
-            }
-        }
-
-        // --- Vincular eventos a los botones dinámicamente ---
-        function asignarEventosBotones() {
-            const botones = document.querySelectorAll('.btn[data-tarea]');
-            botones.forEach(btn => {
-                // Remover listener previo si lo hubiera (por seguridad)
-                btn.removeEventListener('click', handlerClick);
-                btn.addEventListener('click', handlerClick);
-            });
-        }
-
-        // Manejador único
-        function handlerClick(e) {
-            e.preventDefault();
-            const btn = e.currentTarget;
-            const tareaId = btn.getAttribute('data-tarea');
-            const desc = btn.getAttribute('data-desc') || '';
-            agregarParticipante(tareaId, desc);
-        }
-
-        // --- Inicial ---
-        window.onload = async () => {
-            statusEl.textContent = '🌱 Conectando al jardín comunitario...';
-            await cargarTodasLasTareas();
-            asignarEventosBotones();
-        };
-
-        // Por si hay botones que se agreguen dinámicamente (no es el caso), pero lo dejamos
-        window.addEventListener('load', function() {
-            // Ya se llamó en onload, pero aseguramos
-        });
-    </script>
-
-    <!-- Explicación amable del funcionamiento compartido -->
-    <div style="font-size: 0.8rem; color: #a28d7c; margin-top: 0.8rem; text-align: center; max-width: 700px; padding: 0 0.5rem;">
-        🌐  Esto ya no es solo local: los nombres y grados se guardan en una base de datos compartida. 
-        ¡Todas las personas que visiten esta página verán los mismos voluntarios, como en un mural comunitario!
-        <br><span style="opacity: 0.8;">(proyecto Waldorf con Supabase, claves anónimas para demo)</span>
-    </div>
 </body>
 </html>

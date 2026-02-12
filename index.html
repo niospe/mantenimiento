@@ -644,194 +644,199 @@
         </footer>
     </div>
 
-    <script>
-        // --------------------------------------------------------------
-        // CONFIGURACIÓN - ¡REEMPLAZA CON TUS URLs DE GOOGLE SHEETS!
-        // --------------------------------------------------------------
-        const CONFIG = {
-            CSV_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSxvEliqsj2N2PbI8qXaUcMSem0vBUrXdo5ucBYsySuYqxGvJHNMS6BBhLIcGthrmRVx1Up1iSJ2SdM/pub?gid=634978238&single=true&output=csv',
+  
+<script>
+    // --------------------------------------------------------------
+    // CONFIGURACIÓN - ¡REEMPLAZA CON TUS URLs DE GOOGLE SHEETS!
+    // --------------------------------------------------------------
+    const CONFIG = {
+           CSV_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSxvEliqsj2N2PbI8qXaUcMSem0vBUrXdo5ucBYsySuYqxGvJHNMS6BBhLIcGthrmRVx1Up1iSJ2SdM/pub?gid=634978238&single=true&output=csv',
             APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbxwqP_mX7t0vKsiP12GvkaUphGTHSuw5oHRwAigG1MuxJnVsVccCjiJR6wBtfjIB5huQA/exec'
         };
 
-        // Lista completa de TODAS las tareas (IDs únicos)
-        const TAREAS = [
-            'prim1', 'prim2', 'prim3', 'prim4',
-            'jard-mat1', 'jard-mat2', 'jard-mat3', 'jard-mat4', 'jard-mat5', 'jard-mat6', 'jard-mat7', 'jard-mat8',
-            'mat1', 'mat2', 'mat3',
-            'jard-pen1', 'jard-pen2', 'jard-pen3', 'jard-pen4', 'jard-pen5', 'jard-pen6', 'jard-pen7',
-            'pre1', 'pre2', 'pre3', 'pre4',
-            'gen1', 'gen2', 'gen3', 'gen4', 'gen5'
-        ];
+    // Lista completa de TODAS las tareas
+    const TAREAS = [
+        'prim1', 'prim2', 'prim3', 'prim4',
+        'jard-mat1', 'jard-mat2', 'jard-mat3', 'jard-mat4', 'jard-mat5', 'jard-mat6', 'jard-mat7', 'jard-mat8',
+        'mat1', 'mat2', 'mat3',
+        'jard-pen1', 'jard-pen2', 'jard-pen3', 'jard-pen4', 'jard-pen5', 'jard-pen6', 'jard-pen7',
+        'pre1', 'pre2', 'pre3', 'pre4',
+        'gen1', 'gen2', 'gen3', 'gen4', 'gen5'
+    ];
 
-        // Estado de la aplicación
-        let colaboradores = {};
-        const statusMsg = document.getElementById('status-message');
+    // Estado de la aplicación
+    let colaboradores = {};
+    const statusMsg = document.getElementById('status-message');
 
-        // Inicializar estructura vacía
-        TAREAS.forEach(t => colaboradores[t] = []);
+    // Inicializar estructura vacía
+    TAREAS.forEach(t => colaboradores[t] = []);
 
-        // --------------------------------------------------------------
-        // LEER DATOS DESDE GOOGLE SHEETS (CSV)
-        // --------------------------------------------------------------
-        async function cargarDatos() {
-            try {
-                statusMsg.textContent = '📖 Leyendo mural comunitario...';
-                const response = await fetch(CONFIG.CSV_URL);
-                const csv = await response.text();
+    // --------------------------------------------------------------
+    // LEER DATOS DESDE GOOGLE SHEETS (CSV) - SOLO UNA VEZ AL INICIO
+    // --------------------------------------------------------------
+    async function cargarDatosIniciales() {
+        try {
+            statusMsg.textContent = '📖 Leyendo mural comunitario...';
+            const response = await fetch(CONFIG.CSV_URL);
+            const csv = await response.text();
+            
+            // Resetear datos
+            TAREAS.forEach(t => colaboradores[t] = []);
+            
+            // Parsear CSV
+            const lineas = csv.split('\n');
+            for (let i = 1; i < lineas.length; i++) {
+                if (!lineas[i].trim()) continue;
                 
-                // Resetear datos
-                TAREAS.forEach(t => colaboradores[t] = []);
-                
-                // Parsear CSV
-                const lineas = csv.split('\n');
-                for (let i = 1; i < lineas.length; i++) {
-                    if (!lineas[i].trim()) continue;
+                const cols = lineas[i].split(',');
+                if (cols.length >= 3) {
+                    const tareaId = cols[0].replace(/"/g, '').trim();
+                    const nombre = cols[1].replace(/"/g, '').trim();
+                    const grado = cols[2].replace(/"/g, '').trim();
                     
-                    const cols = lineas[i].split(',');
-                    if (cols.length >= 3) {
-                        const tareaId = cols[0].replace(/"/g, '').trim();
-                        const nombre = cols[1].replace(/"/g, '').trim();
-                        const grado = cols[2].replace(/"/g, '').trim();
-                        
-                        if (TAREAS.includes(tareaId)) {
-                            if (!colaboradores[tareaId]) colaboradores[tareaId] = [];
-                            colaboradores[tareaId].push({ nombre, grado });
-                        }
+                    if (TAREAS.includes(tareaId)) {
+                        if (!colaboradores[tareaId]) colaboradores[tareaId] = [];
+                        colaboradores[tareaId].push({ nombre, grado });
                     }
                 }
-                
-                statusMsg.textContent = '✅ Conectado a Google Sheets · datos compartidos';
-                statusMsg.style.background = '#d1e0d2';
-            } catch (error) {
-                console.error('Error cargando CSV:', error);
-                statusMsg.textContent = '⚠️ Usando datos locales. Los cambios se guardarán cuando haya conexión.';
-                statusMsg.style.background = '#eedccb';
-                
-                // Intentar cargar desde localStorage
-                const local = localStorage.getItem('waldorf_jornada');
-                if (local) {
-                    try {
-                        colaboradores = JSON.parse(local);
-                    } catch(e) {}
-                }
             }
             
-            // Actualizar todas las listas
-            TAREAS.forEach(t => renderizarMuro(t));
-        }
-
-        // --------------------------------------------------------------
-        // GUARDAR EN GOOGLE SHEETS (Apps Script)
-        // --------------------------------------------------------------
-        async function guardarEnGoogleSheets(tareaId, nombre, grado) {
-            try {
-                const url = `${CONFIG.APPS_SCRIPT_URL}?tarea=${encodeURIComponent(tareaId)}&nombre=${encodeURIComponent(nombre)}&grado=${encodeURIComponent(grado)}&ts=${Date.now()}`;
-                
-                await fetch(url, {
-                    mode: 'no-cors',
-                    method: 'GET'
-                });
-                
-                console.log('✅ Dato enviado a Google Sheets');
-                return true;
-            } catch (error) {
-                console.error('Error enviando a Google Sheets:', error);
-                return false;
-            }
-        }
-
-        // --------------------------------------------------------------
-        // AGREGAR COLABORADOR (llamado desde botones)
-        // --------------------------------------------------------------
-        window.agregarColaborador = async function(tareaId, descripcion) {
-            // Obtener inputs
-            const nombreInput = document.getElementById(`nombre-${tareaId}`);
-            const gradoInput = document.getElementById(`grado-${tareaId}`);
-            
-            let nombre = nombreInput ? nombreInput.value.trim() : '';
-            let grado = gradoInput ? gradoInput.value.trim() : '';
-            
-            // Validar
-            if (!nombre && !grado) {
-                alert('👋 Escribe al menos tu nombre');
-                return;
-            }
-            
-            nombre = nombre || 'Voluntario';
-            grado = grado || '—';
-            
-            // 1. Guardar LOCALMENTE
-            if (!colaboradores[tareaId]) colaboradores[tareaId] = [];
-            colaboradores[tareaId].push({ nombre, grado });
-            
-            // 2. Guardar en localStorage (respaldo)
+            // Guardar en localStorage como respaldo
             localStorage.setItem('waldorf_jornada', JSON.stringify(colaboradores));
             
-            // 3. Renderizar inmediatamente
-            renderizarMuro(tareaId);
+            statusMsg.textContent = '✅ Conectado a Google Sheets · datos compartidos';
+            statusMsg.style.background = '#d1e0d2';
+        } catch (error) {
+            console.error('Error cargando CSV:', error);
+            statusMsg.textContent = '⚠️ Usando datos locales. Los cambios se guardarán igual.';
+            statusMsg.style.background = '#eedccb';
             
-            // 4. Limpiar inputs
-            if (nombreInput) nombreInput.value = '';
-            if (gradoInput) gradoInput.value = '';
-            
-            // 5. Enviar a Google Sheets (en segundo plano)
-            statusMsg.textContent = '📤 Guardando en mural comunitario...';
-            await guardarEnGoogleSheets(tareaId, nombre, grado);
-            statusMsg.textContent = '✨ ¡Gracias! Tu colaboración ya es visible para todos';
-            setTimeout(() => statusMsg.textContent = '✅ Conectado a Google Sheets', 2000);
-        };
-
-        // --------------------------------------------------------------
-        // RENDERIZAR MURO DE UNA TAREA
-        // --------------------------------------------------------------
-        function renderizarMuro(tareaId) {
-            const listaUl = document.getElementById(`list-${tareaId}`);
-            if (!listaUl) return;
-            
-            const participantes = colaboradores[tareaId] || [];
-            
-            listaUl.innerHTML = '';
-            
-            if (participantes.length === 0) {
-                const emptyLi = document.createElement('li');
-                emptyLi.className = 'empty-message';
-                emptyLi.textContent = 'Aún sin voluntades · animate';
-                listaUl.appendChild(emptyLi);
-                return;
-            }
-            
-            // Mostrar últimos 5 (más recientes)
-            const ultimos = participantes.slice(-5).reverse();
-            ultimos.forEach(p => {
-                const li = document.createElement('li');
-                li.textContent = `${p.nombre} · ${p.grado}`;
-                listaUl.appendChild(li);
-            });
-            
-            if (participantes.length > 5) {
-                const li = document.createElement('li');
-                li.textContent = `... y ${participantes.length - 5} más`;
-                li.style.background = '#f3ede7';
-                listaUl.appendChild(li);
+            // Intentar cargar desde localStorage
+            const local = localStorage.getItem('waldorf_jornada');
+            if (local) {
+                try {
+                    colaboradores = JSON.parse(local);
+                } catch(e) {}
             }
         }
+        
+        // Actualizar todas las listas
+        TAREAS.forEach(t => renderizarMuro(t));
+    }
 
-        // --------------------------------------------------------------
-        // INICIALIZAR
-        // --------------------------------------------------------------
-     window.onload = () => {
-            cargarDatos();
+    // --------------------------------------------------------------
+    // GUARDAR EN GOOGLE SHEETS (Apps Script)
+    // --------------------------------------------------------------
+    async function guardarEnGoogleSheets(tareaId, nombre, grado) {
+        try {
+            const url = `${CONFIG.APPS_SCRIPT_URL}?tarea=${encodeURIComponent(tareaId)}&nombre=${encodeURIComponent(nombre)}&grado=${encodeURIComponent(grado)}&ts=${Date.now()}`;
             
-            // Refrescar cada 120 segundos para ver nuevos datos
-            setInterval(cargarDatos, 120000);
-            
-            // Escuchar cambios en localStorage (misma compu)
-            window.addEventListener('storage', (e) => {
-                if (e.key === 'waldorf_jornada') {
-                    cargarDatos();
-                }
+            await fetch(url, {
+                mode: 'no-cors',
+                method: 'GET'
             });
-        };
-    </script>
+            
+            console.log('✅ Dato enviado a Google Sheets');
+            return true;
+        } catch (error) {
+            console.error('Error enviando a Google Sheets:', error);
+            return false;
+        }
+    }
+
+    // --------------------------------------------------------------
+    // AGREGAR COLABORADOR (llamado desde botones)
+    // --------------------------------------------------------------
+    window.agregarColaborador = async function(tareaId, descripcion) {
+        // Obtener inputs
+        const nombreInput = document.getElementById(`nombre-${tareaId}`);
+        const gradoInput = document.getElementById(`grado-${tareaId}`);
+        
+        let nombre = nombreInput ? nombreInput.value.trim() : '';
+        let grado = gradoInput ? gradoInput.value.trim() : '';
+        
+        // Validar
+        if (!nombre && !grado) {
+            alert('👋 Escribe al menos tu nombre');
+            return;
+        }
+        
+        nombre = nombre || 'Voluntario';
+        grado = grado || '—';
+        
+        // 1. Guardar LOCALMENTE (inmediato)
+        if (!colaboradores[tareaId]) colaboradores[tareaId] = [];
+        colaboradores[tareaId].push({ nombre, grado });
+        
+        // 2. Guardar en localStorage (persistencia)
+        localStorage.setItem('waldorf_jornada', JSON.stringify(colaboradores));
+        
+        // 3. Renderizar inmediatamente (NO SE BORRA)
+        renderizarMuro(tareaId);
+        
+        // 4. Limpiar inputs
+        if (nombreInput) nombreInput.value = '';
+        if (gradoInput) gradoInput.value = '';
+        
+        // 5. Enviar a Google Sheets (en segundo plano, sin afectar la vista)
+        statusMsg.textContent = '📤 Guardando en mural comunitario...';
+        await guardarEnGoogleSheets(tareaId, nombre, grado);
+        statusMsg.textContent = '✨ ¡Gracias! Tu colaboración ya se guardó';
+        setTimeout(() => statusMsg.textContent = '✅ Conectado a Google Sheets', 2000);
+    };
+
+    // --------------------------------------------------------------
+    // RENDERIZAR MURO DE UNA TAREA
+    // --------------------------------------------------------------
+    function renderizarMuro(tareaId) {
+        const listaUl = document.getElementById(`list-${tareaId}`);
+        if (!listaUl) return;
+        
+        const participantes = colaboradores[tareaId] || [];
+        
+        listaUl.innerHTML = '';
+        
+        if (participantes.length === 0) {
+            const emptyLi = document.createElement('li');
+            emptyLi.className = 'empty-message';
+            emptyLi.textContent = 'Aún sin voluntades · animate';
+            listaUl.appendChild(emptyLi);
+            return;
+        }
+        
+        // Mostrar últimos 5 (más recientes)
+        const ultimos = participantes.slice(-5).reverse();
+        ultimos.forEach(p => {
+            const li = document.createElement('li');
+            li.textContent = `${p.nombre} · ${p.grado}`;
+            listaUl.appendChild(li);
+        });
+        
+        if (participantes.length > 5) {
+            const li = document.createElement('li');
+            li.textContent = `... y ${participantes.length - 5} más`;
+            li.style.background = '#f3ede7';
+            listaUl.appendChild(li);
+        }
+    }
+
+    // --------------------------------------------------------------
+    // INICIALIZAR - SIN RECARGA AUTOMÁTICA
+    // --------------------------------------------------------------
+    window.onload = () => {
+        cargarDatosIniciales();
+        
+        // Escuchar cambios en localStorage (misma compu, diferentes pestañas)
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'waldorf_jornada') {
+                // Solo actualizar si el cambio viene de OTRA pestaña
+                try {
+                    colaboradores = JSON.parse(e.newValue);
+                    TAREAS.forEach(t => renderizarMuro(t));
+                } catch(e) {}
+            }
+        });
+    };
+</script>
 </body>
 </html>

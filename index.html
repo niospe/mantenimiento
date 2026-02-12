@@ -819,19 +819,20 @@
         // --------------------------------------------------------------
         // INICIALIZAR
         // --------------------------------------------------------------
-        window.onload = () => {
-            cargarDatos();
-            
-            // Refrescar cada 30 segundos para ver nuevos datos
-            setInterval(cargarDatos, 30000);
-            
-            // Escuchar cambios en localStorage (misma compu)
-            window.addEventListener('storage', (e) => {
-                if (e.key === 'waldorf_jornada') {
-                    cargarDatos();
-                }
-            });
-        };
+      window.onload = () => {
+        cargarDatosIniciales();
+        
+        // Escuchar cambios en localStorage (misma compu, diferentes pestañas)
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'waldorf_jornada') {
+                // Solo actualizar si el cambio viene de OTRA pestaña
+                try {
+                    colaboradores = JSON.parse(e.newValue);
+                    TAREAS.forEach(t => renderizarMuro(t));
+                } catch(e) {}
+            }
+        });
+    };
     </script>
 </body>
 </html>

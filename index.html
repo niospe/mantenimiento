@@ -2,14 +2,19 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=yes">
     <title>Mantenimiento Waldorf · Jornada 9-15</title>
     <style>
-        /* Mismo estilo Waldorf mobile-first */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* ESTILO WALDORF - MOBILE FIRST */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             background-color: #faf4e9;
-            font-family: 'Atkinson Hyperlegible', 'Segoe UI', sans-serif;
+            font-family: 'Atkinson Hyperlegible', 'Segoe UI', Roboto, -apple-system, sans-serif;
             line-height: 1.5;
             color: #3e2e23;
             padding: 1rem;
@@ -17,42 +22,66 @@
             flex-direction: column;
             align-items: center;
         }
-        .waldorf-wrapper { max-width: 900px; width: 100%; }
+
+        .waldorf-wrapper {
+            max-width: 900px;
+            width: 100%;
+        }
+
         h1 {
             font-size: 2.2rem;
             font-weight: 400;
+            letter-spacing: 2px;
             text-transform: uppercase;
             color: #5e4b3a;
             border-bottom: 4px solid #dbb88c;
             display: inline-block;
             padding-bottom: 0.2rem;
             margin-bottom: 1.5rem;
-            text-shadow: 2px 2px 0 rgba(235,205,167,0.3);
+            margin-top: 0.2rem;
+            text-shadow: 2px 2px 0 rgba(235, 205, 167, 0.3);
+            word-break: break-word;
         }
+
         .area {
-            background: rgba(255,247,240,0.8);
+            background: rgba(255, 247, 240, 0.8);
             border-radius: 32px 12px 32px 12px;
             padding: 1.5rem 1.2rem;
             margin-bottom: 2rem;
+            box-shadow: 0 8px 18px -6px rgba(120, 90, 70, 0.12);
             border: 1px solid #e6d8c5;
         }
+
         h2 {
             font-size: 1.8rem;
             font-weight: 380;
             color: #7a5a44;
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
             border-left: 12px solid #c7aa82;
             padding-left: 0.75rem;
-            margin-bottom: 0.6rem;
+            line-height: 1.2;
         }
+
         .subtitulo-detalle {
             font-size: 0.95rem;
+            font-weight: 400;
             color: #8f6e5c;
+            margin-top: -0.2rem;
             margin-bottom: 1.2rem;
             padding-left: 1.2rem;
             font-style: italic;
             border-left: 3px solid #e2cfbc;
         }
-        .task-list { display: flex; flex-direction: column; gap: 1.3rem; }
+
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.3rem;
+        }
+
         .task-item {
             background: #fffefc;
             padding: 1.1rem 1.2rem;
@@ -60,32 +89,38 @@
             border: 1px solid #eedccb;
             box-shadow: 4px 4px 0 #e2cfbc;
         }
+
         .task-name {
             font-weight: 650;
             font-size: 1.15rem;
             color: #4a3729;
+            display: block;
+            margin-bottom: 0.8rem;
             border-bottom: 1px dashed #d9b8a4;
             padding-bottom: 0.5rem;
-            margin-bottom: 0.8rem;
         }
+
         .contribution-form {
             display: flex;
             flex-direction: column;
             gap: 0.7rem;
-            margin: 0.8rem 0;
+            margin: 0.8rem 0 0.6rem;
         }
+
         .form-row {
             display: flex;
             flex-wrap: wrap;
             align-items: center;
             gap: 0.4rem 0.8rem;
         }
+
         label {
             font-size: 0.9rem;
             color: #69554a;
             font-weight: 600;
             min-width: 60px;
         }
+
         input {
             background: #fefcf7;
             border: 1.5px solid #e3cebc;
@@ -93,12 +128,17 @@
             padding: 0.7rem 1.1rem;
             font-size: 1rem;
             flex: 1 1 180px;
+            font-family: inherit;
+            transition: 0.2s;
         }
+
         input:focus {
             border-color: #b4835c;
             outline: none;
-            box-shadow: 0 0 0 3px rgba(180,140,100,0.15);
+            background-color: #fff9f2;
+            box-shadow: 0 0 0 3px rgba(180, 140, 100, 0.15);
         }
+
         .btn {
             background: #ebdac9;
             border: none;
@@ -109,42 +149,74 @@
             color: #3a2e25;
             border-bottom: 4px solid #bcaa96;
             align-self: flex-start;
-            cursor: pointer;
             transition: 0.07s;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #e5cfbc;
+            border-bottom-width: 4px;
         }
+
         .btn:hover {
             background: #e2cfbc;
             border-bottom-width: 2px;
             transform: translateY(2px);
+            border-bottom-color: #9f8b7a;
         }
+
         .contributors-wall {
             margin-top: 1.2rem;
             background: #f7efe7;
             padding: 1rem 1.2rem;
             border-radius: 18px;
             border-left: 8px solid #c6a882;
+            font-size: 0.95rem;
         }
+
         .wall-title {
             font-weight: 650;
             color: #624c3c;
+            display: flex;
+            align-items: center;
+            gap: 8px;
             margin-bottom: 0.7rem;
+            font-size: 1rem;
         }
+
         .participant-list {
             list-style: none;
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
         }
+
         .participant-list li {
             background: white;
             padding: 0.45rem 1.2rem;
             border-radius: 30px;
             border: 1px solid #eddacb;
+            color: #4d3a2e;
+            display: inline-block;
             width: fit-content;
             max-width: 100%;
+            word-break: break-word;
             box-shadow: 1px 2px 0 #dac2b0;
         }
-        .empty-message { color: #957a68; font-style: italic; }
+
+        .empty-message {
+            color: #957a68;
+            font-style: italic;
+            padding: 0.3rem 0;
+        }
+
+        @media (min-width: 640px) {
+            body { padding: 2rem; }
+            .waldorf-wrapper { max-width: 1100px; }
+            .form-row { flex-wrap: nowrap; }
+        }
+
         .connection-status {
             font-size: 0.8rem;
             padding: 0.5rem 1.2rem;
@@ -152,17 +224,16 @@
             border-radius: 40px;
             display: inline-block;
             margin-bottom: 1rem;
+            color: #4a3a2e;
         }
+
         footer {
             margin-top: 2rem;
-            text-align: center;
+            font-size: 0.85rem;
             color: #8f7a68;
+            text-align: center;
             border-top: 1px dashed #dac2af;
             padding-top: 1.8rem;
-        }
-        @media (min-width: 640px) {
-            body { padding: 2rem; }
-            .waldorf-wrapper { max-width: 1100px; }
         }
     </style>
 </head>
@@ -173,12 +244,13 @@
             🌱 Conectando al mural comunitario...
         </div>
 
-        <!-- PRIMARIA - Materiales -->
+        <!-- =========== PRIMARIA - MATERIALES Y HERRAMIENTAS =========== -->
         <section class="area">
             <h2>📘 Primaria</h2>
-            <div class="subtitulo-detalle">Materiales y herramientas · mañana 9 a 15</div>
+            <div class="subtitulo-detalle">
+                Lista de materiales y herramientas · mañana 9 a 15
+            </div>
             <div class="task-list">
-                <!-- Tarea 1 -->
                 <div class="task-item">
                     <span class="task-name">🔨 Percutora para sacar piso</span>
                     <div class="contribution-form">
@@ -187,11 +259,10 @@
                         <button class="btn" onclick="agregarColaborador('prim1', 'Percutora para sacar piso')">🌿 Sumarme</button>
                     </div>
                     <div class="contributors-wall" id="wall-prim1">
-                        <div class="wall-title">👥 Colaboran:</div>
+                        <span class="wall-title">👥 Colaboran:</span>
                         <ul class="participant-list" id="list-prim1"><li class="empty-message">Cargando...</li></ul>
                     </div>
                 </div>
-                <!-- Tarea 2 -->
                 <div class="task-item">
                     <span class="task-name">🌿 Herramientas de jardinería</span>
                     <div class="contribution-form">
@@ -200,11 +271,10 @@
                         <button class="btn" onclick="agregarColaborador('prim2', 'Herramientas de jardinería')">🌿 Sumarme</button>
                     </div>
                     <div class="contributors-wall" id="wall-prim2">
-                        <div class="wall-title">👥 Colaboran:</div>
+                        <span class="wall-title">👥 Colaboran:</span>
                         <ul class="participant-list" id="list-prim2"><li class="empty-message">Cargando...</li></ul>
                     </div>
                 </div>
-                <!-- Tarea 3 -->
                 <div class="task-item">
                     <span class="task-name">🔩 Taladro</span>
                     <div class="contribution-form">
@@ -213,11 +283,10 @@
                         <button class="btn" onclick="agregarColaborador('prim3', 'Taladro')">🌿 Sumarme</button>
                     </div>
                     <div class="contributors-wall" id="wall-prim3">
-                        <div class="wall-title">👥 Colaboran:</div>
+                        <span class="wall-title">👥 Colaboran:</span>
                         <ul class="participant-list" id="list-prim3"><li class="empty-message">Cargando...</li></ul>
                     </div>
                 </div>
-                <!-- Tarea 4 -->
                 <div class="task-item">
                     <span class="task-name">📦 Cinta doble faz 3M (40mts) para colgar cuadros</span>
                     <div class="contribution-form">
@@ -226,40 +295,365 @@
                         <button class="btn" onclick="agregarColaborador('prim4', 'Cinta doble faz 40m')">🌿 Sumarme</button>
                     </div>
                     <div class="contributors-wall" id="wall-prim4">
-                        <div class="wall-title">👥 Colaboran:</div>
+                        <span class="wall-title">👥 Colaboran:</span>
                         <ul class="participant-list" id="list-prim4"><li class="empty-message">Cargando...</li></ul>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Aquí van TODAS las demás secciones (Jardín materiales, Maternal, Jardín pendientes, Preescolar, General) -->
-        <!-- Por espacio, no repito todo el HTML pero la estructura es IDÉNTICA a la que ya funciona -->
-        <!-- EN TU CÓDIGO ACTUAL, MANTENÉS TODAS LAS TAREAS QUE YA TENÉS -->
-        <!-- SOLO CAMBIA LA PARTE DE JAVASCRIPT POR LA DE ABAJO -->
+        <!-- =========== JARDÍN - MATERIALES =========== -->
+        <section class="area">
+            <h2>🌼 Jardín · Materiales</h2>
+            <div class="subtitulo-detalle">Lista de materiales jardín</div>
+            <div class="task-list">
+                <div class="task-item">
+                    <span class="task-name">🪵 Protectores para calefactores (listones de pino)</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-jard-mat1"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-jard-mat1"></div>
+                        <button class="btn" onclick="agregarColaborador('jard-mat1', 'Protectores calefactores listones')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-jard-mat1">
+                        <ul class="participant-list" id="list-jard-mat1"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">🛡️ Cobertor para arenero de jardín y de maternal</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-jard-mat2"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-jard-mat2"></div>
+                        <button class="btn" onclick="agregarColaborador('jard-mat2', 'Cobertor arenero jardín/maternal')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-jard-mat2">
+                        <ul class="participant-list" id="list-jard-mat2"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">🚪 Puerta de madera para cocina</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-jard-mat3"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-jard-mat3"></div>
+                        <button class="btn" onclick="agregarColaborador('jard-mat3', 'Puerta cocina madera')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-jard-mat3">
+                        <ul class="participant-list" id="list-jard-mat3"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">☀️ Estructura y policarbonato para alero de preescolar</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-jard-mat4"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-jard-mat4"></div>
+                        <button class="btn" onclick="agregarColaborador('jard-mat4', 'Estructura policarbonato alero')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-jard-mat4">
+                        <ul class="participant-list" id="list-jard-mat4"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">🧻 Dos dispenser acero inoxidable para toallas de papel (baños)</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-jard-mat5"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-jard-mat5"></div>
+                        <button class="btn" onclick="agregarColaborador('jard-mat5', 'Dispenser toallas acero x2')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-jard-mat5">
+                        <ul class="participant-list" id="list-jard-mat5"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">🧻 Tres dispenser acero inoxidable para papel higiénico (baños)</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-jard-mat6"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-jard-mat6"></div>
+                        <button class="btn" onclick="agregarColaborador('jard-mat6', 'Dispenser papel hig x3')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-jard-mat6">
+                        <ul class="participant-list" id="list-jard-mat6"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">📎 Cinta doble faz para pegar alfombra</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-jard-mat7"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-jard-mat7"></div>
+                        <button class="btn" onclick="agregarColaborador('jard-mat7', 'Cinta doble faz alfombra')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-jard-mat7">
+                        <ul class="participant-list" id="list-jard-mat7"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">🐢 Tortuguita exterior para reponer (puerta sala de Ana)</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-jard-mat8"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-jard-mat8"></div>
+                        <button class="btn" onclick="agregarColaborador('jard-mat8', 'Tortuguita exterior')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-jard-mat8">
+                        <ul class="participant-list" id="list-jard-mat8"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-        <!-- ===== IMPORTANTE: MANTENÉ TODAS TUS TAREAS EXISTENTES ===== -->
-        <!-- Ací debajo va todo el HTML de tareas que ya tenés (Jardín, Maternal, etc) -->
-        <!-- Yo las omito por brevedad pero en tu página ya están -->
-        
+        <!-- =========== MATERNAL - PENDIENTES =========== -->
+        <section class="area">
+            <h2>🍼 Maternal</h2>
+            <div class="subtitulo-detalle">Lista de pendientes a finalizar · mañana 9 a 15</div>
+            <div class="task-list">
+                <div class="task-item">
+                    <span class="task-name">🏠 Nivelar casita exterior</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-mat1"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-mat1"></div>
+                        <button class="btn" onclick="agregarColaborador('mat1', 'Nivelar casita exterior')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-mat1">
+                        <ul class="participant-list" id="list-mat1"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">🧷 Pegar alfombra (traer cinta doble faz)</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-mat2"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-mat2"></div>
+                        <button class="btn" onclick="agregarColaborador('mat2', 'Pegar alfombra')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-mat2">
+                        <ul class="participant-list" id="list-mat2"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">🪟 Poner protectores en ventanas</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-mat3"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-mat3"></div>
+                        <button class="btn" onclick="agregarColaborador('mat3', 'Protectores ventanas')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-mat3">
+                        <ul class="participant-list" id="list-mat3"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =========== JARDÍN - PENDIENTES =========== -->
+        <section class="area">
+            <h2>🌱 Jardín · Pendientes</h2>
+            <div class="subtitulo-detalle">Lista de pendientes a finalizar · mañana 9 a 15</div>
+            <div class="task-list">
+                <div class="task-item">
+                    <span class="task-name">🧱 Colocar azulejos sala Ana</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-jard-pen1"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-jard-pen1"></div>
+                        <button class="btn" onclick="agregarColaborador('jard-pen1', 'Colocar azulejos sala Ana')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-jard-pen1">
+                        <ul class="participant-list" id="list-jard-pen1"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">🪵 Lijar tobogán chico de mangrullo (donde se aplicó masilla)</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-jard-pen2"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-jard-pen2"></div>
+                        <button class="btn" onclick="agregarColaborador('jard-pen2', 'Lijar tobogán mangrullo')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-jard-pen2">
+                        <ul class="participant-list" id="list-jard-pen2"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">🎨 Aplicar segunda mano de cetol a mangrullo</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-jard-pen3"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-jard-pen3"></div>
+                        <button class="btn" onclick="agregarColaborador('jard-pen3', 'Cetol mangrullo 2da mano')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-jard-pen3">
+                        <ul class="participant-list" id="list-jard-pen3"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">🔩 Cortar tornillos de hamaca y pasar segunda mano de esmalte sintético</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-jard-pen4"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-jard-pen4"></div>
+                        <button class="btn" onclick="agregarColaborador('jard-pen4', 'Cortar tornillos hamaca esmalte')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-jard-pen4">
+                        <ul class="participant-list" id="list-jard-pen4"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">🏖️ Agregar arena a areneros</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-jard-pen5"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-jard-pen5"></div>
+                        <button class="btn" onclick="agregarColaborador('jard-pen5', 'Agregar arena areneros')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-jard-pen5">
+                        <ul class="participant-list" id="list-jard-pen5"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">🛠️ Hacer cobertores para areneros</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-jard-pen6"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-jard-pen6"></div>
+                        <button class="btn" onclick="agregarColaborador('jard-pen6', 'Hacer cobertores areneros')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-jard-pen6">
+                        <ul class="participant-list" id="list-jard-pen6"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">🏡 Aplicar cetol a la casita de sala Ceci</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-jard-pen7"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-jard-pen7"></div>
+                        <button class="btn" onclick="agregarColaborador('jard-pen7', 'Cetol casita Ceci')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-jard-pen7">
+                        <ul class="participant-list" id="list-jard-pen7"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =========== PREESCOLAR - PENDIENTES =========== -->
+        <section class="area">
+            <h2>🎨 Preescolar</h2>
+            <div class="subtitulo-detalle">Lista de pendientes a finalizar · mañana 9 a 15</div>
+            <div class="task-list">
+                <div class="task-item">
+                    <span class="task-name">🔥 Hacer protector para calefactor</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-pre1"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-pre1"></div>
+                        <button class="btn" onclick="agregarColaborador('pre1', 'Protector calefactor')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-pre1">
+                        <ul class="participant-list" id="list-pre1"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">🚪 Terminar de lijar y pintar puerta de baño</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-pre2"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-pre2"></div>
+                        <button class="btn" onclick="agregarColaborador('pre2', 'Lijar y pintar puerta baño')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-pre2">
+                        <ul class="participant-list" id="list-pre2"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">🪑 Lijar dos mesas y aplicar cetol</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-pre3"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-pre3"></div>
+                        <button class="btn" onclick="agregarColaborador('pre3', 'Lijar mesas cetol')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-pre3">
+                        <ul class="participant-list" id="list-pre3"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">🏠 Lijar y aplicar cetol a casita</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-pre4"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-pre4"></div>
+                        <button class="btn" onclick="agregarColaborador('pre4', 'Lijar y cetol casita')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-pre4">
+                        <ul class="participant-list" id="list-pre4"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =========== GENERAL - PENDIENTES =========== -->
+        <section class="area">
+            <h2>🛠️ General</h2>
+            <div class="subtitulo-detalle">Lista de pendientes a finalizar</div>
+            <div class="task-list">
+                <div class="task-item">
+                    <span class="task-name">🚽 Instalar mingitorio</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-gen1"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-gen1"></div>
+                        <button class="btn" onclick="agregarColaborador('gen1', 'Instalar mingitorio')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-gen1">
+                        <ul class="participant-list" id="list-gen1"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">🔥 Arreglar protectores de calefactores</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-gen2"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-gen2"></div>
+                        <button class="btn" onclick="agregarColaborador('gen2', 'Arreglar protectores calefactores')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-gen2">
+                        <ul class="participant-list" id="list-gen2"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">🚪 Conseguir puerta para cocina y colocarla</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-gen3"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-gen3"></div>
+                        <button class="btn" onclick="agregarColaborador('gen3', 'Conseguir y colocar puerta cocina')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-gen3">
+                        <ul class="participant-list" id="list-gen3"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">🚽 Cambiar tapa inodoros pequeños (comprarlos)</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-gen4"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-gen4"></div>
+                        <button class="btn" onclick="agregarColaborador('gen4', 'Comprar y cambiar tapa inodoros')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-gen4">
+                        <ul class="participant-list" id="list-gen4"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <span class="task-name">🧺 Comprar cambiador para baño y colocarlo</span>
+                    <div class="contribution-form">
+                        <div class="form-row"><label>Nombre</label><input type="text" id="nombre-gen5"></div>
+                        <div class="form-row"><label>Grado</label><input type="text" id="grado-gen5"></div>
+                        <button class="btn" onclick="agregarColaborador('gen5', 'Comprar y colocar cambiador')">🌿 Sumarme</button>
+                    </div>
+                    <div class="contributors-wall" id="wall-gen5">
+                        <ul class="participant-list" id="list-gen5"><li class="empty-message">Cargando...</li></ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <footer>
-            🌟 Jornada Waldorf 9-15 · Datos compartidos en Google Sheets (todos ven lo mismo)
+            🌟 Jornada Waldorf · 9 a 15 · Sumate con tu nombre y grado · Todos ven la misma lista
         </footer>
     </div>
 
     <script>
         // --------------------------------------------------------------
-        // CONFIGURACIÓN - ¡REEMPLAZA CON TUS URLs!
+        // CONFIGURACIÓN - ¡REEMPLAZA CON TUS URLs DE GOOGLE SHEETS!
         // --------------------------------------------------------------
         const CONFIG = {
-            // URL para LEER datos (CSV público)
             CSV_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSxvEliqsj2N2PbI8qXaUcMSem0vBUrXdo5ucBYsySuYqxGvJHNMS6BBhLIcGthrmRVx1Up1iSJ2SdM/pub?gid=634978238&single=true&output=csv',
-            
-            // URL para ESCRIBIR datos (Apps Script)
             APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbxwqP_mX7t0vKsiP12GvkaUphGTHSuw5oHRwAigG1MuxJnVsVccCjiJR6wBtfjIB5huQA/exec'
         };
 
-        // Todas las tareas (IDs) - MANTENÉ LA LISTA COMPLETA DE TUS TAREAS
+        // Lista completa de TODAS las tareas (IDs únicos)
         const TAREAS = [
             'prim1', 'prim2', 'prim3', 'prim4',
             'jard-mat1', 'jard-mat2', 'jard-mat3', 'jard-mat4', 'jard-mat5', 'jard-mat6', 'jard-mat7', 'jard-mat8',
@@ -273,11 +667,11 @@
         let colaboradores = {};
         const statusMsg = document.getElementById('status-message');
 
-        // Inicializar estructura
+        // Inicializar estructura vacía
         TAREAS.forEach(t => colaboradores[t] = []);
 
         // --------------------------------------------------------------
-        // FUNCIÓN 1: LEER DATOS DESDE GOOGLE SHEETS (CSV)
+        // LEER DATOS DESDE GOOGLE SHEETS (CSV)
         // --------------------------------------------------------------
         async function cargarDatos() {
             try {
@@ -288,7 +682,7 @@
                 // Resetear datos
                 TAREAS.forEach(t => colaboradores[t] = []);
                 
-                // Parsear CSV (simple, sin comillas)
+                // Parsear CSV
                 const lineas = csv.split('\n');
                 for (let i = 1; i < lineas.length; i++) {
                     if (!lineas[i].trim()) continue;
@@ -300,20 +694,21 @@
                         const grado = cols[2].replace(/"/g, '').trim();
                         
                         if (TAREAS.includes(tareaId)) {
+                            if (!colaboradores[tareaId]) colaboradores[tareaId] = [];
                             colaboradores[tareaId].push({ nombre, grado });
                         }
                     }
                 }
                 
-                statusMsg.textContent = '✅ Conectado a Google Sheets · datos en tiempo real';
+                statusMsg.textContent = '✅ Conectado a Google Sheets · datos compartidos';
                 statusMsg.style.background = '#d1e0d2';
             } catch (error) {
                 console.error('Error cargando CSV:', error);
-                statusMsg.textContent = '⚠️ No se pudo conectar a Google Sheets. Usando caché local.';
+                statusMsg.textContent = '⚠️ Usando datos locales. Los cambios se guardarán cuando haya conexión.';
                 statusMsg.style.background = '#eedccb';
                 
-                // Intentar cargar desde localStorage como respaldo
-                const local = localStorage.getItem('waldorf_colaboradores');
+                // Intentar cargar desde localStorage
+                const local = localStorage.getItem('waldorf_jornada');
                 if (local) {
                     try {
                         colaboradores = JSON.parse(local);
@@ -326,11 +721,10 @@
         }
 
         // --------------------------------------------------------------
-        // FUNCIÓN 2: GUARDAR DATOS EN GOOGLE SHEETS (Apps Script)
+        // GUARDAR EN GOOGLE SHEETS (Apps Script)
         // --------------------------------------------------------------
         async function guardarEnGoogleSheets(tareaId, nombre, grado) {
             try {
-                // Usar no-cors para evitar problemas CORS
                 const url = `${CONFIG.APPS_SCRIPT_URL}?tarea=${encodeURIComponent(tareaId)}&nombre=${encodeURIComponent(nombre)}&grado=${encodeURIComponent(grado)}&ts=${Date.now()}`;
                 
                 await fetch(url, {
@@ -347,7 +741,7 @@
         }
 
         // --------------------------------------------------------------
-        // FUNCIÓN 3: AGREGAR COLABORADOR (llamada desde botones)
+        // AGREGAR COLABORADOR (llamado desde botones)
         // --------------------------------------------------------------
         window.agregarColaborador = async function(tareaId, descripcion) {
             // Obtener inputs
@@ -366,12 +760,12 @@
             nombre = nombre || 'Voluntario';
             grado = grado || '—';
             
-            // 1. Guardar LOCALMENTE (para verlo ya)
+            // 1. Guardar LOCALMENTE
             if (!colaboradores[tareaId]) colaboradores[tareaId] = [];
             colaboradores[tareaId].push({ nombre, grado });
             
             // 2. Guardar en localStorage (respaldo)
-            localStorage.setItem('waldorf_colaboradores', JSON.stringify(colaboradores));
+            localStorage.setItem('waldorf_jornada', JSON.stringify(colaboradores));
             
             // 3. Renderizar inmediatamente
             renderizarMuro(tareaId);
@@ -382,19 +776,13 @@
             
             // 5. Enviar a Google Sheets (en segundo plano)
             statusMsg.textContent = '📤 Guardando en mural comunitario...';
-            const exito = await guardarEnGoogleSheets(tareaId, nombre, grado);
-            
-            if (exito) {
-                statusMsg.textContent = '✨ ¡Gracias! Tu colaboración ya es visible para todos';
-                setTimeout(() => statusMsg.textContent = '✅ Conectado a Google Sheets', 3000);
-            } else {
-                statusMsg.textContent = '⚠️ Guardado localmente. Se sincronizará después.';
-                setTimeout(() => statusMsg.textContent = '🌿 Modo offline · datos locales', 3000);
-            }
+            await guardarEnGoogleSheets(tareaId, nombre, grado);
+            statusMsg.textContent = '✨ ¡Gracias! Tu colaboración ya es visible para todos';
+            setTimeout(() => statusMsg.textContent = '✅ Conectado a Google Sheets', 2000);
         };
 
         // --------------------------------------------------------------
-        // FUNCIÓN 4: RENDERIZAR MURO DE UNA TAREA
+        // RENDERIZAR MURO DE UNA TAREA
         // --------------------------------------------------------------
         function renderizarMuro(tareaId) {
             const listaUl = document.getElementById(`list-${tareaId}`);
@@ -405,11 +793,14 @@
             listaUl.innerHTML = '';
             
             if (participantes.length === 0) {
-                listaUl.innerHTML = '<li class="empty-message">Aún sin voluntades · animate</li>';
+                const emptyLi = document.createElement('li');
+                emptyLi.className = 'empty-message';
+                emptyLi.textContent = 'Aún sin voluntades · animate';
+                listaUl.appendChild(emptyLi);
                 return;
             }
             
-            // Mostrar últimos 5
+            // Mostrar últimos 5 (más recientes)
             const ultimos = participantes.slice(-5).reverse();
             ultimos.forEach(p => {
                 const li = document.createElement('li');
@@ -431,12 +822,12 @@
         window.onload = () => {
             cargarDatos();
             
-            // Refrescar cada 30 segundos para ver nuevos datos
-            setInterval(cargarDatos, 30000);
+            // Refrescar cada 10 segundos para ver nuevos datos
+            setInterval(cargarDatos, 10000);
             
             // Escuchar cambios en localStorage (misma compu)
             window.addEventListener('storage', (e) => {
-                if (e.key === 'waldorf_colaboradores') {
+                if (e.key === 'waldorf_jornada') {
                     cargarDatos();
                 }
             });

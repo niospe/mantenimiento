@@ -300,10 +300,40 @@
             box-shadow: 1px 2px 0 #dac2b0;
         }
 
+        /* ===== MENSAJE "SIN VOLUNTADES" MÁS VISIBLE ===== */
         .empty-message {
-            color: #957a68;
+            color: #b34a4a;  /* Rojo terroso que combina con la paleta */
             font-style: italic;
-            padding: 0.3rem 0;
+            padding: 0.8rem 1rem;
+            background: #ffeae3;  /* Fondo suave rosado/terroso */
+            border-radius: 40px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1rem;
+            border: 2px dashed #d98f8f;
+            box-shadow: 0 2px 6px rgba(180, 70, 70, 0.1);
+            letter-spacing: 0.5px;
+        }
+        
+        /* Versión alternativa si queremos un estilo más llamativo aún */
+        .empty-message-highlight {
+            color: #b34a4a;
+            background: #fff0e8;
+            border: 2px solid #d98f8f;
+            font-weight: 700;
+        }
+        
+        /* Pequeño icono de mano ayudando para reforzar el mensaje */
+        .empty-message::before {
+            content: "🫱 ";
+            font-size: 1.2rem;
+            filter: drop-shadow(0 1px 1px rgba(0,0,0,0.1));
+        }
+        
+        .empty-message::after {
+            content: " ¡Sé el primero!";
+            font-weight: 400;
+            color: #8f5a5a;
         }
 
         .loading-spinner {
@@ -334,7 +364,7 @@
         // --------------------------------------------------------------
         const CONFIG = {
             // Hoja de "Tareas" - Debe tener columnas: id, categoriaId, categoriaNombre, categoriaDescripcion, categoriaIcono, tareaNombre
-            TAREAS_CSV_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ0DLBlzR3AM8qIPNvX5782yxhY44a0DnTidE8SHsWyxG8g2qWBphy1FQP5Ykx-0Ycv9wdjrWJx6cXS/pub?gid=0&single=true&output=csv',
+            TAREAS_CSV_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSxvEliqsj2N2PbI8qXaUcMSem0vBUrXdo5ucBYsySuYqxGvJHNMS6BBhLIcGthrmRVx1Up1iSJ2SdM/pub?gid=0&single=true&output=csv',
             
             // Hoja de "Colaboradores" - Debe tener columnas: tareaId, nombre, grado
             COLABORADORES_CSV_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSxvEliqsj2N2PbI8qXaUcMSem0vBUrXdo5ucBYsySuYqxGvJHNMS6BBhLIcGthrmRVx1Up1iSJ2SdM/pub?gid=634978238&single=true&output=csv',
@@ -352,7 +382,6 @@
             currentCategoriaId: null   // ID de categoría seleccionada
         };
 
-        const statusMsg = document.getElementById('status-message');
         const appEl = document.getElementById('app');
 
         // --------------------------------------------------------------
@@ -460,6 +489,41 @@
         }
 
         // --------------------------------------------------------------
+        // RECARGAR SOLO COLABORADORES DESDE GOOGLE SHEETS
+        // --------------------------------------------------------------
+        async function recargarColaboradores() {
+            try {
+                const response = await fetch(CONFIG.COLABORADORES_CSV_URL);
+                const csv = await response.text();
+                
+                // Reiniciar colaboradores
+                appState.tareas.forEach(t => appState.colaboradores[t.id] = []);
+                
+                const lineas = csv.split('\n');
+                for (let i = 1; i < lineas.length; i++) {
+                    if (!lineas[i].trim()) continue;
+                    
+                    const cols = lineas[i].split(',').map(c => c.replace(/"/g, '').trim());
+                    if (cols.length >= 3) {
+                        const [tareaId, nombre, grado] = cols;
+                        
+                        if (appState.colaboradores[tareaId]) {
+                            appState.colaboradores[tareaId].push({ nombre, grado });
+                        }
+                    }
+                }
+                
+                // Guardar en localStorage
+                localStorage.setItem('waldorf_datos_completos', JSON.stringify(appState));
+                
+                return true;
+            } catch (error) {
+                console.error('Error recargando colaboradores:', error);
+                return false;
+            }
+        }
+
+        // --------------------------------------------------------------
         // GUARDAR EN GOOGLE SHEETS (Apps Script)
         // --------------------------------------------------------------
         async function guardarEnGoogleSheets(tareaId, nombre, grado) {
@@ -493,63 +557,23 @@
             nombre = nombre || 'Voluntario';
             grado = grado || '—';
             
-            // Actualizar estado
-            if (!appState.colaboradores[tareaId]) {
-                appState.colaboradores[tareaId] = [];
-            }
-            appState.colaboradores[tareaId].push({ nombre, grado });
+            // Enviar a Google Sheets
+            actualizarStatus('📤 Guardando colaboración...');
+            await guardarEnGoogleSheets(tareaId, nombre, grado);
             
-            // Guardar en localStorage
-            localStorage.setItem('waldorf_datos_completos', JSON.stringify(appState));
-            
-            // Renderizar la tarea específica
-            const tarea = appState.tareas.find(t => t.id === tareaId);
-            if (tarea && appState.currentCategoriaId === tarea.categoriaId) {
-                renderizarTarea(tareaId);
-            }
+            // RECARGAR todos los colaboradores desde Google Sheets
+            await recargarColaboradores();
             
             // Limpiar inputs
             if (nombreInput) nombreInput.value = '';
             if (gradoInput) gradoInput.value = '';
             
-            // Enviar a Google Sheets
-            actualizarStatus('📤 Guardando colaboración...');
-            await guardarEnGoogleSheets(tareaId, nombre, grado);
+            // Re-renderizar la página actual para mostrar todos los colaboradores
+            renderizarApp();
+            
             actualizarStatus('✨ ¡Gracias por sumarte!');
             setTimeout(() => actualizarStatus('✅ Conectado a Google Sheets'), 2000);
         };
-
-        // Renderizar una tarea específica
-        function renderizarTarea(tareaId) {
-            const listaUl = document.getElementById(`list-${tareaId}`);
-            if (!listaUl) return;
-            
-            const participantes = appState.colaboradores[tareaId] || [];
-            
-            listaUl.innerHTML = '';
-            
-            if (participantes.length === 0) {
-                const emptyLi = document.createElement('li');
-                emptyLi.className = 'empty-message';
-                emptyLi.textContent = 'Aún sin voluntades · animate';
-                listaUl.appendChild(emptyLi);
-                return;
-            }
-            
-            const ultimos = participantes.slice(-5).reverse();
-            ultimos.forEach(p => {
-                const li = document.createElement('li');
-                li.textContent = `${p.nombre} · ${p.grado}`;
-                listaUl.appendChild(li);
-            });
-            
-            if (participantes.length > 5) {
-                const li = document.createElement('li');
-                li.textContent = `... y ${participantes.length - 5} más`;
-                li.style.background = '#f3ede7';
-                listaUl.appendChild(li);
-            }
-        }
 
         // --------------------------------------------------------------
         // FUNCIONES DE NAVEGACIÓN
@@ -577,6 +601,38 @@
             } else {
                 appEl.innerHTML = renderCategoria();
             }
+            
+            // Después de renderizar, actualizar todas las listas de colaboradores
+            if (appState.currentView === 'categoria') {
+                const tareasCategoria = appState.tareas.filter(t => t.categoriaId === appState.currentCategoriaId);
+                tareasCategoria.forEach(tarea => {
+                    renderizarListaColaboradores(tarea.id);
+                });
+            }
+        }
+
+        function renderizarListaColaboradores(tareaId) {
+            const listaUl = document.getElementById(`list-${tareaId}`);
+            if (!listaUl) return;
+            
+            const participantes = appState.colaboradores[tareaId] || [];
+            
+            listaUl.innerHTML = '';
+            
+            if (participantes.length === 0) {
+                const emptyLi = document.createElement('li');
+                emptyLi.className = 'empty-message';
+                emptyLi.textContent = 'Aún sin voluntades'; // El contenido se muestra, pero con ::before y ::after
+                listaUl.appendChild(emptyLi);
+                return;
+            }
+            
+            // Mostrar TODOS los colaboradores, no solo los últimos
+            participantes.forEach(p => {
+                const li = document.createElement('li');
+                li.textContent = `${p.nombre} · ${p.grado}`;
+                listaUl.appendChild(li);
+            });
         }
 
         function renderHome() {
@@ -676,7 +732,7 @@
             return html;
         }
 
-        // Actualizar mensaje de estado y re-renderizar si es necesario
+        // Actualizar mensaje de estado
         function actualizarStatus(mensaje) {
             const statusEl = document.getElementById('status-message');
             if (statusEl) {
@@ -705,11 +761,15 @@
             // Verificar si hay hash en la URL al cargar
             if (window.location.hash) {
                 const categoriaId = window.location.hash.substring(1);
-                const categoria = appState.categorias.find(c => c.id === categoriaId);
-                if (categoria) {
-                    appState.currentView = 'categoria';
-                    appState.currentCategoriaId = categoriaId;
-                }
+                // Esperar a que se carguen los datos
+                setTimeout(() => {
+                    const categoria = appState.categorias.find(c => c.id === categoriaId);
+                    if (categoria) {
+                        appState.currentView = 'categoria';
+                        appState.currentCategoriaId = categoriaId;
+                        renderizarApp();
+                    }
+                }, 1000);
             }
         };
 

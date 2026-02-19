@@ -359,117 +359,145 @@
     </div>
 
     <script>
-        // --------------------------------------------------------------
-        // CONFIGURACIÓN - ¡REEMPLAZA CON TUS URLs DE GOOGLE SHEETS!
-        // --------------------------------------------------------------
-        const CONFIG = {
-            // Hoja de "Tareas" - Debe tener columnas: id, categoriaId, categoriaNombre, categoriaDescripcion, categoriaIcono, tareaNombre
-            TAREAS_CSV_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSxvEliqsj2N2PbI8qXaUcMSem0vBUrXdo5ucBYsySuYqxGvJHNMS6BBhLIcGthrmRVx1Up1iSJ2SdM/pub?gid=415827104&single=true&output=csv',
+    // --------------------------------------------------------------
+    // CONFIGURACIÓN - ¡REEMPLAZA CON TUS URLs DE GOOGLE SHEETS!
+    // --------------------------------------------------------------
+    const CONFIG = {
+        // Hoja de "Tareas" - Debe tener columnas: id, categoriaId, categoriaNombre, categoriaDescripcion, categoriaIcono, tareaNombre
+        TAREAS_CSV_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSxvEliqsj2N2PbI8qXaUcMSem0vBUrXdo5ucBYsySuYqxGvJHNMS6BBhLIcGthrmRVx1Up1iSJ2SdM/pub?gid=415827104&single=true&output=csv',
+        
+        // Hoja de "Colaboradores" - Debe tener columnas: tareaId, nombre, grado
+        COLABORADORES_CSV_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSxvEliqsj2N2PbI8qXaUcMSem0vBUrXdo5ucBYsySuYqxGvJHNMS6BBhLIcGthrmRVx1Up1iSJ2SdM/pub?gid=634978238&single=true&output=csv',
+        
+        // Apps Script para guardar nuevos colaboradores
+        APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbz6SJnY36J56O2L3srCJB58vcZ4GHoyNtja2BC01fdpXY5voX2DAPWNK8LFyF81-VZDOw/exec'
+    };
+
+    // Estado de la aplicación
+    let appState = {
+        categorias: [],           // Lista de categorías únicas
+        tareas: [],               // Todas las tareas con su categoría
+        colaboradores: {},         // { tareaId: [{nombre, grado}] }
+        currentView: 'home',       // 'home' o 'categoria'
+        currentCategoriaId: null   // ID de categoría seleccionada
+    };
+
+    const appEl = document.getElementById('app');
+
+    // --------------------------------------------------------------
+    // CARGAR DATOS DESDE GOOGLE SHEETS
+    // --------------------------------------------------------------
+    async function cargarDatosIniciales() {
+        try {
+            actualizarStatus('📖 Leyendo tareas y colaboradores...');
             
-            // Hoja de "Colaboradores" - Debe tener columnas: tareaId, nombre, grado
-            COLABORADORES_CSV_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSxvEliqsj2N2PbI8qXaUcMSem0vBUrXdo5ucBYsySuYqxGvJHNMS6BBhLIcGthrmRVx1Up1iSJ2SdM/pub?gid=634978238&single=true&output=csv',
+            // Cargar tareas y colaboradores en paralelo
+            const [tareasCSV, colaboradoresCSV] = await Promise.all([
+                fetch(CONFIG.TAREAS_CSV_URL).then(res => res.text()),
+                fetch(CONFIG.COLABORADORES_CSV_URL).then(res => res.text())
+            ]);
             
-            // Apps Script para guardar nuevos colaboradores
-            APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbz5Ybb1eMwfSTgoeGGaGX7xyDhLba7Cktp-wvttUCNAiYjwLX2v89HF_xUWLDPu4NA35g/exec'
-        };
-
-        // Estado de la aplicación
-        let appState = {
-            categorias: [],           // Lista de categorías únicas
-            tareas: [],               // Todas las tareas con su categoría
-            colaboradores: {},         // { tareaId: [{nombre, grado}] }
-            currentView: 'home',       // 'home' o 'categoria'
-            currentCategoriaId: null   // ID de categoría seleccionada
-        };
-
-        const appEl = document.getElementById('app');
-
-        // --------------------------------------------------------------
-        // CARGAR DATOS DESDE GOOGLE SHEETS
-        // --------------------------------------------------------------
-        async function cargarDatosIniciales() {
-            try {
-                actualizarStatus('📖 Leyendo tareas y colaboradores...');
-                
-                // Cargar tareas y colaboradores en paralelo
-                const [tareasCSV, colaboradoresCSV] = await Promise.all([
-                    fetch(CONFIG.TAREAS_CSV_URL).then(res => res.text()),
-                    fetch(CONFIG.COLABORADORES_CSV_URL).then(res => res.text())
-                ]);
-                
-                // Procesar tareas y construir categorías
-                procesarTareas(tareasCSV);
-                
-                // Procesar colaboradores
-                procesarColaboradores(colaboradoresCSV);
-                
-                // Guardar en localStorage
-                localStorage.setItem('waldorf_datos_completos', JSON.stringify(appState));
-                
-                actualizarStatus('✅ Datos cargados desde Google Sheets');
-                
-                // Renderizar vista actual
-                renderizarApp();
-                
-            } catch (error) {
-                console.error('Error cargando datos:', error);
-                actualizarStatus('⚠️ Usando datos guardados localmente');
-                
-                // Intentar cargar desde localStorage
-                const local = localStorage.getItem('waldorf_datos_completos');
-                if (local) {
-                    try {
-                        appState = JSON.parse(local);
-                    } catch(e) {}
-                }
-                
-                renderizarApp();
+            // Procesar tareas y construir categorías
+            procesarTareas(tareasCSV);
+            
+            // Procesar colaboradores
+            procesarColaboradores(colaboradoresCSV);
+            
+            // Guardar en localStorage
+            localStorage.setItem('waldorf_datos_completos', JSON.stringify(appState));
+            
+            actualizarStatus('✅ Datos cargados desde Google Sheets');
+            
+            // Renderizar vista actual
+            renderizarApp();
+            
+        } catch (error) {
+            console.error('Error cargando datos:', error);
+            actualizarStatus('⚠️ Usando datos guardados localmente');
+            
+            // Intentar cargar desde localStorage
+            const local = localStorage.getItem('waldorf_datos_completos');
+            if (local) {
+                try {
+                    appState = JSON.parse(local);
+                } catch(e) {}
             }
-        }
-
-        // Procesar CSV de tareas
-        function procesarTareas(csv) {
-            const lineas = csv.split('\n');
-            const categoriasMap = new Map();
-            const tareas = [];
             
-            // Asumimos primera línea como encabezados
-            for (let i = 1; i < lineas.length; i++) {
-                if (!lineas[i].trim()) continue;
+            renderizarApp();
+        }
+    }
+
+    // Procesar CSV de tareas
+    function procesarTareas(csv) {
+        const lineas = csv.split('\n');
+        const categoriasMap = new Map();
+        const tareas = [];
+        
+        // Asumimos primera línea como encabezados
+        for (let i = 1; i < lineas.length; i++) {
+            if (!lineas[i].trim()) continue;
+            
+            const cols = lineas[i].split(',').map(c => c.replace(/"/g, '').trim());
+            if (cols.length >= 6) {
+                const [id, categoriaId, categoriaNombre, categoriaDescripcion, categoriaIcono, tareaNombre] = cols;
                 
-                const cols = lineas[i].split(',').map(c => c.replace(/"/g, '').trim());
-                if (cols.length >= 6) {
-                    const [id, categoriaId, categoriaNombre, categoriaDescripcion, categoriaIcono, tareaNombre] = cols;
-                    
-                    // Guardar categoría si no existe
-                    if (!categoriasMap.has(categoriaId)) {
-                        categoriasMap.set(categoriaId, {
-                            id: categoriaId,
-                            nombre: categoriaNombre,
-                            descripcion: categoriaDescripcion,
-                            icono: categoriaIcono
-                        });
-                    }
-                    
-                    // Guardar tarea
-                    tareas.push({
-                        id: id,
-                        categoriaId: categoriaId,
-                        nombre: tareaNombre
+                // Guardar categoría si no existe
+                if (!categoriasMap.has(categoriaId)) {
+                    categoriasMap.set(categoriaId, {
+                        id: categoriaId,
+                        nombre: categoriaNombre,
+                        descripcion: categoriaDescripcion,
+                        icono: categoriaIcono
                     });
                 }
+                
+                // Guardar tarea
+                tareas.push({
+                    id: id,
+                    categoriaId: categoriaId,
+                    nombre: tareaNombre
+                });
             }
-            
-            appState.categorias = Array.from(categoriasMap.values());
-            appState.tareas = tareas;
         }
+        
+        appState.categorias = Array.from(categoriasMap.values());
+        appState.tareas = tareas;
+    }
 
-        // Procesar CSV de colaboradores
-        function procesarColaboradores(csv) {
-            const colaboradores = {};
+    // Procesar CSV de colaboradores
+    function procesarColaboradores(csv) {
+        const colaboradores = {};
+        
+        // Inicializar todas las tareas con array vacío
+        appState.tareas.forEach(t => colaboradores[t.id] = []);
+        
+        const lineas = csv.split('\n');
+        for (let i = 1; i < lineas.length; i++) {
+            if (!lineas[i].trim()) continue;
             
-            // Inicializar todas las tareas con array vacío
-            appState.tareas.forEach(t => colaboradores[t.id] = []);
+            const cols = lineas[i].split(',').map(c => c.replace(/"/g, '').trim());
+            if (cols.length >= 3) {
+                const [tareaId, nombre, grado] = cols;
+                
+                if (colaboradores[tareaId]) {
+                    colaboradores[tareaId].push({ nombre, grado });
+                }
+            }
+        }
+        
+        appState.colaboradores = colaboradores;
+    }
+
+    // --------------------------------------------------------------
+    // RECARGAR SOLO COLABORADORES DESDE GOOGLE SHEETS
+    // --------------------------------------------------------------
+    async function recargarColaboradores() {
+        try {
+            const response = await fetch(CONFIG.COLABORADORES_CSV_URL);
+            const csv = await response.text();
+            
+            // Reiniciar colaboradores
+            appState.tareas.forEach(t => appState.colaboradores[t.id] = []);
             
             const lineas = csv.split('\n');
             for (let i = 1; i < lineas.length; i++) {
@@ -479,343 +507,388 @@
                 if (cols.length >= 3) {
                     const [tareaId, nombre, grado] = cols;
                     
-                    if (colaboradores[tareaId]) {
-                        colaboradores[tareaId].push({ nombre, grado });
+                    if (appState.colaboradores[tareaId]) {
+                        appState.colaboradores[tareaId].push({ nombre, grado });
                     }
                 }
             }
             
-            appState.colaboradores = colaboradores;
+            // Guardar en localStorage
+            localStorage.setItem('waldorf_datos_completos', JSON.stringify(appState));
+            
+            return true;
+        } catch (error) {
+            console.error('Error recargando colaboradores:', error);
+            return false;
         }
-
-        // --------------------------------------------------------------
-        // RECARGAR SOLO COLABORADORES DESDE GOOGLE SHEETS
-        // --------------------------------------------------------------
-        async function recargarColaboradores() {
-            try {
-                const response = await fetch(CONFIG.COLABORADORES_CSV_URL);
-                const csv = await response.text();
-                
-                // Reiniciar colaboradores
-                appState.tareas.forEach(t => appState.colaboradores[t.id] = []);
-                
-                const lineas = csv.split('\n');
-                for (let i = 1; i < lineas.length; i++) {
-                    if (!lineas[i].trim()) continue;
-                    
-                    const cols = lineas[i].split(',').map(c => c.replace(/"/g, '').trim());
-                    if (cols.length >= 3) {
-                        const [tareaId, nombre, grado] = cols;
-                        
-                        if (appState.colaboradores[tareaId]) {
-                            appState.colaboradores[tareaId].push({ nombre, grado });
-                        }
-                    }
-                }
-                
-                // Guardar en localStorage
-                localStorage.setItem('waldorf_datos_completos', JSON.stringify(appState));
-                
-                return true;
-            } catch (error) {
-                console.error('Error recargando colaboradores:', error);
-                return false;
-            }
-        }
-
-        // --------------------------------------------------------------
-        // GUARDAR EN GOOGLE SHEETS (Apps Script)
-        // --------------------------------------------------------------
-       async function guardarEnGoogleSheets(tareaId, nombre, grado) {
-    try {
-        // Crear objeto con los datos
-        const datos = {
-            tarea: tareaId,
-            nombre: nombre,
-            grado: grado,
-            timestamp: new Date().toISOString()
-        };
-
-        // Usar POST en lugar de GET para mejor compatibilidad
-        const response = await fetch(CONFIG.APPS_SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors', // Mantenemos no-cors para evitar problemas CORS
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: new URLSearchParams(datos).toString()
-        });
-
-        console.log('✅ Datos enviados a Google Sheets');
-        
-        // Con no-cors no podemos leer la respuesta, así que asumimos éxito
-        return true;
-        
-    } catch (error) {
-        console.error('Error enviando a Google Sheets:', error);
-        
-        // Fallback: guardar en localStorage como backup
-        guardarBackupLocal(tareaId, nombre, grado);
-        
-        return false;
     }
-}
 
-// Función de backup local por si falla Google Sheets
-function guardarBackupLocal(tareaId, nombre, grado) {
-    try {
-        const backups = JSON.parse(localStorage.getItem('waldorf_backups') || '[]');
-        backups.push({
-            tareaId,
-            nombre,
-            grado,
-            timestamp: new Date().toISOString(),
-            intentos: 0
-        });
-        localStorage.setItem('waldorf_backups', JSON.stringify(backups));
-        console.log('📦 Backup guardado localmente');
-    } catch (e) {
-        console.error('Error guardando backup:', e);
-    }
-}
+    // --------------------------------------------------------------
+    // GUARDAR EN GOOGLE SHEETS (Apps Script) - VERSIÓN CORREGIDA
+    // --------------------------------------------------------------
+    async function guardarEnGoogleSheets(tareaId, nombre, grado) {
+        try {
+            // Crear objeto con los datos
+            const datos = {
+                tarea: tareaId,
+                nombre: nombre,
+                grado: grado,
+                timestamp: new Date().toLocaleString('es-AR')
+            };
 
-        // --------------------------------------------------------------
-        // AGREGAR COLABORADOR
-        // --------------------------------------------------------------
-        window.agregarColaborador = async function(tareaId) {
-            const nombreInput = document.getElementById(`nombre-${tareaId}`);
-            const gradoInput = document.getElementById(`grado-${tareaId}`);
+            // Usar JSONP como alternativa para evitar CORS
+            const callbackName = 'callback_' + Date.now();
             
-            let nombre = nombreInput ? nombreInput.value.trim() : '';
-            let grado = gradoInput ? gradoInput.value.trim() : '';
-            
-            if (!nombre && !grado) {
-                alert('👋 Escribe al menos tu nombre');
-                return;
-            }
-            
-            nombre = nombre || 'Voluntario';
-            grado = grado || '—';
-            
-            // Enviar a Google Sheets
-            actualizarStatus('📤 Guardando colaboración...');
-            await guardarEnGoogleSheets(tareaId, nombre, grado);
-            
-            // RECARGAR todos los colaboradores desde Google Sheets
-            await recargarColaboradores();
-            
-            // Limpiar inputs
-            if (nombreInput) nombreInput.value = '';
-            if (gradoInput) gradoInput.value = '';
-            
-            // Re-renderizar la página actual para mostrar todos los colaboradores
-            renderizarApp();
-            
-            actualizarStatus('✨ ¡Gracias por sumarte!');
-            setTimeout(() => actualizarStatus('✅ Conectado a Google Sheets'), 2000);
-        };
-
-        // --------------------------------------------------------------
-        // FUNCIONES DE NAVEGACIÓN
-        // --------------------------------------------------------------
-        function irAHome() {
-            appState.currentView = 'home';
-            appState.currentCategoriaId = null;
-            renderizarApp();
-            window.history.pushState({ view: 'home' }, '', '#');
-        }
-
-        function irACategoria(categoriaId) {
-            appState.currentView = 'categoria';
-            appState.currentCategoriaId = categoriaId;
-            renderizarApp();
-            window.history.pushState({ view: 'categoria', id: categoriaId }, '', `#${categoriaId}`);
-        }
-
-        // --------------------------------------------------------------
-        // RENDERIZADO PRINCIPAL
-        // --------------------------------------------------------------
-        function renderizarApp() {
-            if (appState.currentView === 'home') {
-                appEl.innerHTML = renderHome();
-            } else {
-                appEl.innerHTML = renderCategoria();
-            }
-            
-            // Después de renderizar, actualizar todas las listas de colaboradores
-            if (appState.currentView === 'categoria') {
-                const tareasCategoria = appState.tareas.filter(t => t.categoriaId === appState.currentCategoriaId);
-                tareasCategoria.forEach(tarea => {
-                    renderizarListaColaboradores(tarea.id);
+            // Crear una promesa que se resolverá con JSONP
+            const result = await new Promise((resolve, reject) => {
+                // Crear script element
+                const script = document.createElement('script');
+                
+                // Definir función de callback global
+                window[callbackName] = function(response) {
+                    delete window[callbackName];
+                    document.body.removeChild(script);
+                    resolve(response);
+                };
+                
+                // Construir URL con parámetros
+                const params = new URLSearchParams({
+                    ...datos,
+                    callback: callbackName
                 });
-            }
+                
+                script.src = `${CONFIG.APPS_SCRIPT_URL}?${params.toString()}`;
+                
+                script.onerror = function(error) {
+                    delete window[callbackName];
+                    document.body.removeChild(script);
+                    reject(error);
+                };
+                
+                document.body.appendChild(script);
+                
+                // Timeout por si no hay respuesta
+                setTimeout(() => {
+                    if (window[callbackName]) {
+                        delete window[callbackName];
+                        document.body.removeChild(script);
+                        reject(new Error('Timeout'));
+                    }
+                }, 10000);
+            });
+            
+            console.log('✅ Datos enviados a Google Sheets:', result);
+            return true;
+            
+        } catch (error) {
+            console.error('Error enviando a Google Sheets:', error);
+            
+            // Guardar en localStorage como backup
+            guardarBackupLocal(tareaId, nombre, grado);
+            
+            // Mostrar mensaje amigable
+            alert('📝 No se pudo conectar con Google Sheets, pero tu colaboración se guardó localmente. Se sincronizará automáticamente cuando haya conexión.');
+            
+            return false;
         }
+    }
 
-        function renderizarListaColaboradores(tareaId) {
-            const listaUl = document.getElementById(`list-${tareaId}`);
-            if (!listaUl) return;
+    // Función de backup local por si falla Google Sheets
+    function guardarBackupLocal(tareaId, nombre, grado) {
+        try {
+            const backups = JSON.parse(localStorage.getItem('waldorf_backups') || '[]');
+            backups.push({
+                tareaId,
+                nombre,
+                grado,
+                timestamp: new Date().toISOString(),
+                intentos: 0
+            });
+            localStorage.setItem('waldorf_backups', JSON.stringify(backups));
+            console.log('📦 Backup guardado localmente');
+        } catch (e) {
+            console.error('Error guardando backup:', e);
+        }
+    }
+
+    // Sincronizar backups pendientes
+    async function sincronizarBackups() {
+        try {
+            const backups = JSON.parse(localStorage.getItem('waldorf_backups') || '[]');
             
-            const participantes = appState.colaboradores[tareaId] || [];
+            if (backups.length === 0) return;
             
-            listaUl.innerHTML = '';
+            actualizarStatus('🔄 Sincronizando colaboraciones pendientes...');
             
-            if (participantes.length === 0) {
-                const emptyLi = document.createElement('li');
-                emptyLi.className = 'empty-message';
-                emptyLi.textContent = 'Aún sin voluntades'; // El contenido se muestra, pero con ::before y ::after
-                listaUl.appendChild(emptyLi);
-                return;
+            const backupsSincronizados = [];
+            
+            for (const backup of backups) {
+                try {
+                    await guardarEnGoogleSheets(backup.tareaId, backup.nombre, backup.grado);
+                    backupsSincronizados.push(backup);
+                } catch (e) {
+                    console.error('Error sincronizando backup:', e);
+                }
             }
             
-            // Mostrar TODOS los colaboradores, no solo los últimos
-            participantes.forEach(p => {
-                const li = document.createElement('li');
-                li.textContent = `${p.nombre} · ${p.grado}`;
-                listaUl.appendChild(li);
+            // Eliminar backups sincronizados
+            const nuevosBackups = backups.filter(b => !backupsSincronizados.includes(b));
+            localStorage.setItem('waldorf_backups', JSON.stringify(nuevosBackups));
+            
+            if (nuevosBackups.length === 0) {
+                actualizarStatus('✅ Todas las colaboraciones sincronizadas');
+            }
+            
+        } catch (error) {
+            console.error('Error en sincronización:', error);
+        }
+    }
+
+    // --------------------------------------------------------------
+    // AGREGAR COLABORADOR - VERSIÓN CORREGIDA
+    // --------------------------------------------------------------
+    window.agregarColaborador = async function(tareaId) {
+        const nombreInput = document.getElementById(`nombre-${tareaId}`);
+        const gradoInput = document.getElementById(`grado-${tareaId}`);
+        
+        let nombre = nombreInput ? nombreInput.value.trim() : '';
+        let grado = gradoInput ? gradoInput.value.trim() : '';
+        
+        if (!nombre && !grado) {
+            alert('👋 Escribe al menos tu nombre');
+            return;
+        }
+        
+        nombre = nombre || 'Voluntario';
+        grado = grado || '—';
+        
+        // Enviar a Google Sheets
+        actualizarStatus('📤 Guardando colaboración...');
+        await guardarEnGoogleSheets(tareaId, nombre, grado);
+        
+        // Intentar sincronizar backups pendientes
+        await sincronizarBackups();
+        
+        // RECARGAR todos los colaboradores desde Google Sheets
+        await recargarColaboradores();
+        
+        // Limpiar inputs
+        if (nombreInput) nombreInput.value = '';
+        if (gradoInput) gradoInput.value = '';
+        
+        // Re-renderizar la página actual para mostrar todos los colaboradores
+        renderizarApp();
+        
+        actualizarStatus('✨ ¡Gracias por sumarte!');
+        setTimeout(() => actualizarStatus('✅ Conectado a Google Sheets'), 2000);
+    };
+
+    // --------------------------------------------------------------
+    // FUNCIONES DE NAVEGACIÓN
+    // --------------------------------------------------------------
+    function irAHome() {
+        appState.currentView = 'home';
+        appState.currentCategoriaId = null;
+        renderizarApp();
+        window.history.pushState({ view: 'home' }, '', '#');
+    }
+
+    function irACategoria(categoriaId) {
+        appState.currentView = 'categoria';
+        appState.currentCategoriaId = categoriaId;
+        renderizarApp();
+        window.history.pushState({ view: 'categoria', id: categoriaId }, '', `#${categoriaId}`);
+    }
+
+    // --------------------------------------------------------------
+    // RENDERIZADO PRINCIPAL
+    // --------------------------------------------------------------
+    function renderizarApp() {
+        if (appState.currentView === 'home') {
+            appEl.innerHTML = renderHome();
+        } else {
+            appEl.innerHTML = renderCategoria();
+        }
+        
+        // Después de renderizar, actualizar todas las listas de colaboradores
+        if (appState.currentView === 'categoria') {
+            const tareasCategoria = appState.tareas.filter(t => t.categoriaId === appState.currentCategoriaId);
+            tareasCategoria.forEach(tarea => {
+                renderizarListaColaboradores(tarea.id);
             });
         }
+    }
 
-        function renderHome() {
-            const categorias = appState.categorias;
+    function renderizarListaColaboradores(tareaId) {
+        const listaUl = document.getElementById(`list-${tareaId}`);
+        if (!listaUl) return;
+        
+        const participantes = appState.colaboradores[tareaId] || [];
+        
+        listaUl.innerHTML = '';
+        
+        if (participantes.length === 0) {
+            const emptyLi = document.createElement('li');
+            emptyLi.className = 'empty-message';
+            emptyLi.textContent = 'Aún sin voluntades';
+            listaUl.appendChild(emptyLi);
+            return;
+        }
+        
+        // Mostrar TODOS los colaboradores
+        participantes.forEach(p => {
+            const li = document.createElement('li');
+            li.textContent = `${p.nombre} · ${p.grado}`;
+            listaUl.appendChild(li);
+        });
+    }
+
+    function renderHome() {
+        const categorias = appState.categorias;
+        
+        let html = `
+            <h1>MANTENIMIENTOS</h1>
+            <div class="connection-status" id="status-message">
+                🌱 Conectado al mural comunitario...
+            </div>
             
-            let html = `
-                <h1>MANTENIMIENTOS</h1>
-                <div class="connection-status" id="status-message">
-                    🌱 Conectado al mural comunitario...
-                </div>
-                
-                <div class="categorias-grid">
-            `;
+            <div class="categorias-grid">
+        `;
+        
+        categorias.forEach(cat => {
+            // Contar tareas en esta categoría
+            const tareasCategoria = appState.tareas.filter(t => t.categoriaId === cat.id);
             
-            categorias.forEach(cat => {
-                // Contar tareas en esta categoría
-                const tareasCategoria = appState.tareas.filter(t => t.categoriaId === cat.id);
-                
-                // Contar colaboraciones totales
-                let totalColaboraciones = 0;
-                tareasCategoria.forEach(t => {
-                    totalColaboraciones += (appState.colaboradores[t.id] || []).length;
-                });
-                
-                html += `
-                    <a class="categoria-card" onclick="irACategoria('${cat.id}')">
-                        <div class="categoria-icono">${cat.icono}</div>
-                        <div class="categoria-nombre">${cat.nombre}</div>
-                        <div class="categoria-descripcion">${cat.descripcion}</div>
-                        <div class="categoria-stats">
-                            🛠️ ${tareasCategoria.length} tareas · 
-                            👥 ${totalColaboraciones} voluntarios
-                        </div>
-                    </a>
-                `;
+            // Contar colaboraciones totales
+            let totalColaboraciones = 0;
+            tareasCategoria.forEach(t => {
+                totalColaboraciones += (appState.colaboradores[t.id] || []).length;
             });
             
             html += `
-                </div>
-                <footer>
-                    🌟 Jornada Waldorf · Hacé clic en cada categoría para ver las tareas
-                </footer>
+                <a class="categoria-card" onclick="irACategoria('${cat.id}')">
+                    <div class="categoria-icono">${cat.icono}</div>
+                    <div class="categoria-nombre">${cat.nombre}</div>
+                    <div class="categoria-descripcion">${cat.descripcion}</div>
+                    <div class="categoria-stats">
+                        🛠️ ${tareasCategoria.length} tareas · 
+                        👥 ${totalColaboraciones} voluntarios
+                    </div>
+                </a>
             `;
-            
-            return html;
-        }
+        });
+        
+        html += `
+            </div>
+            <footer>
+                🌟 Jornada Waldorf · Hacé clic en cada categoría para ver las tareas
+            </footer>
+        `;
+        
+        return html;
+    }
 
-        function renderCategoria() {
-            const categoria = appState.categorias.find(c => c.id === appState.currentCategoriaId);
-            if (!categoria) {
-                irAHome();
-                return '';
-            }
-            
-            const tareasCategoria = appState.tareas.filter(t => t.categoriaId === categoria.id);
-            
-            let html = `
-                <button class="btn-volver" onclick="irAHome()">← Volver a categorías</button>
-                <h1>${categoria.icono} ${categoria.nombre}</h1>
-                <div class="connection-status" id="status-message">
-                    🌱 ${categoria.descripcion}
-                </div>
-            `;
-            
-            tareasCategoria.forEach(tarea => {
-                html += `
-                    <div class="area">
-                        <h2>${tarea.nombre}</h2>
-                        <div class="task-item">
-                            <div class="contribution-form">
-                                <div class="form-row">
-                                    <label>Nombre</label>
-                                    <input type="text" id="nombre-${tarea.id}" placeholder="tu nombre">
-                                </div>
-                                <div class="form-row">
-                                    <label>Grado</label>
-                                    <input type="text" id="grado-${tarea.id}" placeholder="grado/familia">
-                                </div>
-                                <button class="btn" onclick="agregarColaborador('${tarea.id}')">🌿 Sumarme</button>
+    function renderCategoria() {
+        const categoria = appState.categorias.find(c => c.id === appState.currentCategoriaId);
+        if (!categoria) {
+            irAHome();
+            return '';
+        }
+        
+        const tareasCategoria = appState.tareas.filter(t => t.categoriaId === categoria.id);
+        
+        let html = `
+            <button class="btn-volver" onclick="irAHome()">← Volver a categorías</button>
+            <h1>${categoria.icono} ${categoria.nombre}</h1>
+            <div class="connection-status" id="status-message">
+                🌱 ${categoria.descripcion}
+            </div>
+        `;
+        
+        tareasCategoria.forEach(tarea => {
+            html += `
+                <div class="area">
+                    <h2>${tarea.nombre}</h2>
+                    <div class="task-item">
+                        <div class="contribution-form">
+                            <div class="form-row">
+                                <label>Nombre</label>
+                                <input type="text" id="nombre-${tarea.id}" placeholder="tu nombre">
                             </div>
-                            <div class="contributors-wall" id="wall-${tarea.id}">
-                                <span class="wall-title">👥 Colaboran:</span>
-                                <ul class="participant-list" id="list-${tarea.id}"></ul>
+                            <div class="form-row">
+                                <label>Grado</label>
+                                <input type="text" id="grado-${tarea.id}" placeholder="grado/familia">
                             </div>
+                            <button class="btn" onclick="agregarColaborador('${tarea.id}')">🌿 Sumarme</button>
+                        </div>
+                        <div class="contributors-wall" id="wall-${tarea.id}">
+                            <span class="wall-title">👥 Colaboran:</span>
+                            <ul class="participant-list" id="list-${tarea.id}"></ul>
                         </div>
                     </div>
-                `;
-            });
-            
-            html += `
-                <button class="btn-volver" onclick="irAHome()">← Volver a categorías</button>
-                <footer>
-                    🌟 Jornada Waldorf · Tu colaboración se guarda en el mural comunitario
-                </footer>
+                </div>
             `;
-            
-            return html;
-        }
+        });
+        
+        html += `
+            <button class="btn-volver" onclick="irAHome()">← Volver a categorías</button>
+            <footer>
+                🌟 Jornada Waldorf · Tu colaboración se guarda en el mural comunitario
+            </footer>
+        `;
+        
+        return html;
+    }
 
-        // Actualizar mensaje de estado
-        function actualizarStatus(mensaje) {
-            const statusEl = document.getElementById('status-message');
-            if (statusEl) {
-                statusEl.textContent = mensaje;
-            }
+    // Actualizar mensaje de estado
+    function actualizarStatus(mensaje) {
+        const statusEl = document.getElementById('status-message');
+        if (statusEl) {
+            statusEl.textContent = mensaje;
         }
+    }
 
-        // Inicializar
-        window.onload = () => {
-            cargarDatosIniciales();
-            
-            // Manejar navegación con historial
-            window.onpopstate = (event) => {
-                if (event.state) {
-                    if (event.state.view === 'home') {
-                        appState.currentView = 'home';
-                        appState.currentCategoriaId = null;
-                    } else if (event.state.view === 'categoria') {
-                        appState.currentView = 'categoria';
-                        appState.currentCategoriaId = event.state.id;
-                    }
-                    renderizarApp();
+    // Inicializar
+    window.onload = () => {
+        cargarDatosIniciales();
+        
+        // Sincronizar backups pendientes al iniciar
+        setTimeout(() => {
+            sincronizarBackups();
+        }, 3000);
+        
+        // Manejar navegación con historial
+        window.onpopstate = (event) => {
+            if (event.state) {
+                if (event.state.view === 'home') {
+                    appState.currentView = 'home';
+                    appState.currentCategoriaId = null;
+                } else if (event.state.view === 'categoria') {
+                    appState.currentView = 'categoria';
+                    appState.currentCategoriaId = event.state.id;
                 }
-            };
-            
-            // Verificar si hay hash en la URL al cargar
-            if (window.location.hash) {
-                const categoriaId = window.location.hash.substring(1);
-                // Esperar a que se carguen los datos
-                setTimeout(() => {
-                    const categoria = appState.categorias.find(c => c.id === categoriaId);
-                    if (categoria) {
-                        appState.currentView = 'categoria';
-                        appState.currentCategoriaId = categoriaId;
-                        renderizarApp();
-                    }
-                }, 1000);
+                renderizarApp();
             }
         };
+        
+        // Verificar si hay hash en la URL al cargar
+        if (window.location.hash) {
+            const categoriaId = window.location.hash.substring(1);
+            // Esperar a que se carguen los datos
+            setTimeout(() => {
+                const categoria = appState.categorias.find(c => c.id === categoriaId);
+                if (categoria) {
+                    appState.currentView = 'categoria';
+                    appState.currentCategoriaId = categoriaId;
+                    renderizarApp();
+                }
+            }, 1000);
+        }
+    };
 
-        // Hacer funciones globales
-        window.irAHome = irAHome;
-        window.irACategoria = irACategoria;
-    </script>
+    // Hacer funciones globales
+    window.irAHome = irAHome;
+    window.irACategoria = irACategoria;
+</script>
 </body>
 </html>

@@ -358,7 +358,7 @@
         <!-- El contenido se renderiza dinámicamente -->
     </div>
 
-    <script>
+   <script>
     // --------------------------------------------------------------
     // CONFIGURACIÓN - ¡REEMPLAZA CON TUS URLs DE GOOGLE SHEETS!
     // --------------------------------------------------------------
@@ -524,7 +524,7 @@
     }
 
     // --------------------------------------------------------------
-    // GUARDAR EN GOOGLE SHEETS (Apps Script) - VERSIÓN CORREGIDA
+    // GUARDAR EN GOOGLE SHEETS (Apps Script)
     // --------------------------------------------------------------
     async function guardarEnGoogleSheets(tareaId, nombre, grado) {
         try {
@@ -578,6 +578,24 @@
             });
             
             console.log('✅ Datos enviados a Google Sheets:', result);
+            
+            // Agregar el colaborador al estado local inmediatamente
+            if (!appState.colaboradores[tareaId]) {
+                appState.colaboradores[tareaId] = [];
+            }
+            
+            // Verificar si ya existe para no duplicar
+            const existe = appState.colaboradores[tareaId].some(
+                c => c.nombre === nombre && c.grado === grado
+            );
+            
+            if (!existe) {
+                appState.colaboradores[tareaId].push({ nombre, grado });
+                
+                // Guardar en localStorage
+                localStorage.setItem('waldorf_datos_completos', JSON.stringify(appState));
+            }
+            
             return true;
             
         } catch (error) {
@@ -585,6 +603,23 @@
             
             // Guardar en localStorage como backup
             guardarBackupLocal(tareaId, nombre, grado);
+            
+            // También agregar al estado local para que se vea inmediatamente
+            if (!appState.colaboradores[tareaId]) {
+                appState.colaboradores[tareaId] = [];
+            }
+            
+            // Verificar si ya existe para no duplicar
+            const existe = appState.colaboradores[tareaId].some(
+                c => c.nombre === nombre && c.grado === grado
+            );
+            
+            if (!existe) {
+                appState.colaboradores[tareaId].push({ nombre, grado });
+                
+                // Guardar en localStorage
+                localStorage.setItem('waldorf_datos_completos', JSON.stringify(appState));
+            }
             
             // Mostrar mensaje amigable
             alert('📝 No se pudo conectar con Google Sheets, pero tu colaboración se guardó localmente. Se sincronizará automáticamente cuando haya conexión.');
@@ -597,15 +632,21 @@
     function guardarBackupLocal(tareaId, nombre, grado) {
         try {
             const backups = JSON.parse(localStorage.getItem('waldorf_backups') || '[]');
-            backups.push({
-                tareaId,
-                nombre,
-                grado,
-                timestamp: new Date().toISOString(),
-                intentos: 0
-            });
-            localStorage.setItem('waldorf_backups', JSON.stringify(backups));
-            console.log('📦 Backup guardado localmente');
+            
+            // Verificar si ya existe en backups
+            const existe = backups.some(b => b.tareaId === tareaId && b.nombre === nombre && b.grado === grado);
+            
+            if (!existe) {
+                backups.push({
+                    tareaId,
+                    nombre,
+                    grado,
+                    timestamp: new Date().toISOString(),
+                    intentos: 0
+                });
+                localStorage.setItem('waldorf_backups', JSON.stringify(backups));
+                console.log('📦 Backup guardado localmente');
+            }
         } catch (e) {
             console.error('Error guardando backup:', e);
         }
@@ -624,7 +665,11 @@
             
             for (const backup of backups) {
                 try {
-                    await guardarEnGoogleSheets(backup.tareaId, backup.nombre, backup.grado);
+                    // Intentar enviar a Google Sheets
+                    await fetch(`${CONFIG.APPS_SCRIPT_URL}?tarea=${encodeURIComponent(backup.tareaId)}&nombre=${encodeURIComponent(backup.nombre)}&grado=${encodeURIComponent(backup.grado)}&timestamp=${encodeURIComponent(backup.timestamp)}&callback=callback_${Date.now()}`, {
+                        mode: 'no-cors'
+                    });
+                    
                     backupsSincronizados.push(backup);
                 } catch (e) {
                     console.error('Error sincronizando backup:', e);
@@ -662,6 +707,10 @@
         nombre = nombre || 'Voluntario';
         grado = grado || '—';
         
+        // Deshabilitar el botón temporalmente para evitar doble envío
+        const boton = document.querySelector(`button[onclick="agregarColaborador('${tareaId}')"]`);
+        if (boton) boton.disabled = true;
+        
         // Enviar a Google Sheets
         actualizarStatus('📤 Guardando colaboración...');
         await guardarEnGoogleSheets(tareaId, nombre, grado);
@@ -669,15 +718,15 @@
         // Intentar sincronizar backups pendientes
         await sincronizarBackups();
         
-        // RECARGAR todos los colaboradores desde Google Sheets
-        await recargarColaboradores();
-        
         // Limpiar inputs
         if (nombreInput) nombreInput.value = '';
         if (gradoInput) gradoInput.value = '';
         
         // Re-renderizar la página actual para mostrar todos los colaboradores
         renderizarApp();
+        
+        // Re-habilitar el botón
+        if (boton) boton.disabled = false;
         
         actualizarStatus('✨ ¡Gracias por sumarte!');
         setTimeout(() => actualizarStatus('✅ Conectado a Google Sheets'), 2000);
@@ -748,10 +797,12 @@
         
         let html = `
             <h1>MANTENIMIENTOS</h1>
+            <div style="margin-bottom: 1rem; font-size: 1rem; color: #5e4b3a;">
+                📅 Última actualización: 19 de febrero
+            </div>
             <div class="connection-status" id="status-message">
                 🌱 Conectado al mural comunitario...
             </div>
-            Ultima actulizacion: 19 de febrero
             <div class="categorias-grid">
         `;
         
@@ -800,6 +851,9 @@
         let html = `
             <button class="btn-volver" onclick="irAHome()">← Volver a categorías</button>
             <h1>${categoria.icono} ${categoria.nombre}</h1>
+            <div style="margin-bottom: 1rem; font-size: 0.9rem; color: #5e4b3a;">
+                📅 Última actualización: 19 de febrero
+            </div>
             <div class="connection-status" id="status-message">
                 🌱 ${categoria.descripcion}
             </div>
